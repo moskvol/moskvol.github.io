@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Даниил | Личный сайт</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a160f;
+            --bg-secondary: #142518;
+            --bg-tertiary: #1a3322;
+            --accent-green: #2d6a4f;
+            --accent-light: #52b788;
+            --accent-bright: #95d5b2;
+            --text-primary: #e8f5e9;
+            --text-secondary: #c8e6c9;
+            --text-muted: #81c784;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-light));
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(45, 106, 79, 0.4);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--accent-bright);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Steam Button */
+        .steam-container {
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .steam-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-light));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(82, 183, 136, 0.3);
+        }
+
+        .steam-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 24px rgba(82, 183, 136, 0.5);
+        }
+
+        .steam-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Sections */
+        section {
+            background: rgba(26, 51, 34, 0.6);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(82, 183, 136, 0.2);
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        section:nth-child(2) { animation-delay: 0.4s; }
+        section:nth-child(3) { animation-delay: 0.7s; }
+
+        h2 {
+            color: var(--accent-bright);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent-green);
+        }
+
+        /* Interests */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .interest-card {
+            background: rgba(45, 106, 79, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .interest-card:hover {
+            background: rgba(82, 183, 136, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(82, 183, 136, 0.3);
+        }
+
+        .interest-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .interest-name {
+            color: var(--accent-bright);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: var(--text-muted);
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 1rem; }
+            section { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="profile-avatar">
+                <img src="https://steamcdn-a.akamaihd.net/avatars/headshots/medium/fb123456789.jpg" alt="Даниил">
+            </div>
+            <h1>Даниил</h1>
+            <p class="subtitle">Геймер | Технофил | Любитель компьютеров</p>
+            
+            <div class="steam-container">
+                <a href="https://steamcommunity.com/id/moskvol/" target="_blank" rel="noopener noreferrer" class="steam-btn">
+                    <svg class="steam-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.979 0C5.361 0 .01 5.387.026 12c0 2.285.315 4.48 1.003 6.5H24v-7.6h-10.92c-.385-2.865-2.485-5.1-5.425-5.9C9.67 4.9 11.979 0 11.979 0zM17.1 12c0 3.015-2.455 5.5-5.48 5.9v7.1h11.926V12H17.1z"/>
+                    </svg>
+                    Steam: moskvol
+                </a>
+            </div>
+        </header>
+
+        <!-- About Section -->
+        <section>
+            <h2>👋 О себе</h2>
+            <p style="color: var(--text-secondary);">
+                Привет! Я Даниил — энтузиаст компьютерной техники и геймер. 
+                Люблю всё, что связано с технологиями, сборкой ПК и игровыми системами.
+            </p>
+        </section>
+
+        <!-- Interests Section -->
+        <section>
+            <h2>💻 Мои интересы</h2>
+            <div class="interests-grid">
+                <div class="interest-card">
+                    <div class="interest-icon">🖥️</div>
+                    <div class="interest-name">Компьютеры</div>
+                </div>
+                <div class="interest-card">
+                    <div class="interest-icon">⚙️</div>
+                    <div class="interest-name">Технологии</div>
+                </div>
+                <div class="interest-card">
+                    <div class="interest-icon">🎮</div>
+                    <div class="interest-name">Гейминг</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 Даниил | Создано с любовью к технологиям ❤️💚</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scroll for Steam button
+        document.querySelector('.steam-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open('https://steamcommunity.com/id/moskvol/', '_blank');
+        });
+    </script>
+</body>
+</html>
