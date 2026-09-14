@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>moskvol // Personal Page</title>
+  <title>moskvol // Personal Station</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #9ecaff;
@@ -204,14 +204,14 @@
     /* === 3. КОНТЕЙНЕР СТРАНИЦЫ === */
     .container {
       width: 100%;
-      max-width: 700px;
+      max-width: 740px;
       background: var(--surface);
       border-radius: var(--radius-lg);
       padding: 32px 28px;
       display: flex;
       flex-direction: column;
       gap: 26px;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
       opacity: 0;
       transform: translateY(24px) scale(0.98);
       transition: opacity 0.6s cubic-bezier(0.2, 0, 0, 1), transform 0.6s cubic-bezier(0.2, 0, 0, 1), background-color 0.4s ease;
@@ -227,13 +227,73 @@
       display: none;
     }
 
+    /* Верхний рекламный баннер SteamForge */
+    .steamforge-top-banner {
+      background: linear-gradient(135deg, var(--surface-container-high) 0%, var(--surface-container) 100%);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--on-surface);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .steamforge-top-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      border-color: #ffffff;
+    }
+
+    .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .banner-badge {
+      background: var(--primary);
+      color: var(--on-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .banner-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .banner-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
     .profile-card {
       background: var(--surface-container);
       padding: 24px;
       border-radius: var(--radius-md);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       transition: background-color 0.4s ease;
     }
 
@@ -308,7 +368,7 @@
     }
 
     .profile-title {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: var(--on-surface);
       letter-spacing: -0.5px;
@@ -317,7 +377,50 @@
     .profile-subtitle {
       font-size: 0.95rem;
       color: var(--on-surface-variant);
-      line-height: 1.4;
+      line-height: 1.5;
+    }
+
+    .activity-banner {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .activity-pulse {
+      width: 12px;
+      height: 12px;
+      background: #3fb950;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #3fb950;
+      animation: pulseAnim 2s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseAnim {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(63, 185, 80, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 185, 80, 0); }
+    }
+
+    .activity-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.82rem;
+    }
+
+    .activity-info strong {
+      color: var(--on-surface);
+      font-size: 0.88rem;
+    }
+
+    .activity-timer {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
     }
 
     .section-label {
@@ -332,7 +435,7 @@
 
     .chips-group {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
 
@@ -359,6 +462,55 @@
       font-size: 0.82rem;
       color: var(--on-surface-variant);
       line-height: 1.45;
+    }
+
+    .hardware-monitor {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 580px) {
+      .hardware-monitor { grid-template-columns: 1fr; }
+    }
+
+    .gauge-box {
+      background: var(--surface-container-high);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .gauge-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+
+    .gauge-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .gauge-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-container-lowest);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .gauge-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: var(--radius-pill);
+      transition: width 0.8s ease;
     }
 
     /* Режим 1: Material You */
@@ -408,17 +560,23 @@
       transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    /* Режим 2: Fastfetch */
+    /* Режим 2: Fastfetch + Терминал интерактива */
     #viewFastfetch {
       display: none;
       background: #090d12;
       border: 1px solid var(--outline-variant);
       border-radius: var(--radius-md);
-      padding: 18px 20px;
+      padding: 20px;
+      flex-direction: column;
+      gap: 16px;
+      overflow-x: auto;
+    }
+
+    .fastfetch-wrapper {
+      display: flex;
       flex-direction: row;
       gap: 20px;
       align-items: flex-start;
-      overflow-x: auto;
     }
 
     .fastfetch-logo {
@@ -442,27 +600,98 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .ff-user {
-      color: var(--primary);
+    .ff-user { color: var(--primary); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .ff-sep { color: var(--outline-variant); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+    .ff-key { color: var(--primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .ff-val { color: #f0f6fc; font-family: 'JetBrains Mono', monospace; }
+
+    .term-input-box {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+    }
+
+    .term-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      flex-grow: 1;
+    }
+
+    .term-response {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #3fb950;
+      white-space: pre-wrap;
+    }
+
+    .games-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .game-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .game-card-title {
+      font-size: 0.9rem;
       font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .ff-sep {
-      color: var(--outline-variant);
-      margin-bottom: 4px;
-      font-family: 'JetBrains Mono', monospace;
+    .game-card-desc {
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
     }
 
-    .ff-key {
+    .pass-generator-card {
+      background: var(--surface-container-low);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pass-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
       color: var(--primary);
-      font-weight: 600;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .ff-val {
-      color: #f0f6fc;
-      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 1px;
+      background: var(--surface-container-lowest);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--outline-variant);
+      min-width: 180px;
+      text-align: center;
+      user-select: all;
     }
 
     .palette-container {
@@ -601,15 +830,51 @@
       font-weight: 700;
     }
 
+    .forge-input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 540px) {
+      .forge-input-grid { grid-template-columns: 1fr; }
+    }
+
+    .forge-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .forge-field label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+
+    .forge-input {
+      background: var(--surface-container-highest);
+      border: 1px solid var(--outline-variant);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
     .code-snippet {
       background: #090d12;
       border: 1px solid var(--outline-variant);
       border-radius: var(--radius-sm);
-      padding: 12px 16px;
+      padding: 14px 16px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--primary);
+      white-space: pre-wrap;
       user-select: all;
+      max-height: 220px;
+      overflow-y: auto;
     }
 
     footer {
@@ -657,37 +922,58 @@
   <!-- 3. ГЛАВНАЯ СТРАНИЦА ПРОФИЛЯ -->
   <main class="container" id="mainContainer">
     
+    <!-- Самый верхний блок-ссылка на сайт проекта SteamForge -->
+    <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener noreferrer" class="steamforge-top-banner" onclick="openExternalLink(event)">
+      <div class="banner-left">
+        <span class="banner-badge">Мой проект</span>
+        <span class="banner-text">🔥 <strong>SteamForge</strong> — утилита для внедрения манифестов Steam</span>
+      </div>
+      <div class="banner-action">
+        <span>Перейти на сайт</span>
+        <span>↗</span>
+      </div>
+    </a>
+
     <header class="profile-card">
       <div class="profile-top-row">
-        <span class="profile-badge">Dual Interface</span>
+        <span class="profile-badge">Dual Interface Station</span>
         
         <div class="top-controls">
           <div class="view-mode-selector">
             <button class="view-btn active" id="btnMaterial" onclick="switchView('material')">Material</button>
             <button class="view-btn" id="btnFastfetch" onclick="switchView('fastfetch')">Fastfetch</button>
           </div>
-          <button class="theme-mode-btn" id="themeModeToggle" onclick="toggleLightDarkMode()" title="Переключить светлую/темную тему">🌙</button>
+          <button class="theme-mode-btn" id="themeModeToggle" onclick="toggleLightDarkMode()" title="Переключить тему">🌙</button>
         </div>
       </div>
 
       <h1 class="profile-title">Привет, я moskvol 👋</h1>
-      <p class="profile-subtitle">Энтузиаст открытого ПО, кастомизации ОС, современного компьютерного железа и игр.</p>
+      <p class="profile-subtitle">Энтузиаст открытого ПО, кастомизации ОС, производительного железа и сетевого гейминга.</p>
+
+      <!-- Live Activity Status -->
+      <div class="activity-banner">
+        <div class="activity-pulse"></div>
+        <div class="activity-info">
+          <span>🎮 В сети: <strong>BeamNG.drive / Counter-Strike 2</strong></span>
+          <span class="activity-timer">Сессия активна: <span id="liveTimer">01:42:18</span></span>
+        </div>
+      </div>
     </header>
 
     <section>
       <div class="section-label">Сферы интересов</div>
       <div class="chips-group">
         <div class="m3-chip">
-          <div class="m3-chip-header">🐧 Linux</div>
-          <p>Свобода окружения, терминал, dotfiles и кастомизация интерфейса.</p>
+          <div class="m3-chip-header">🐧 Linux & Custom OS</div>
+          <p>Свобода терминала, модульные оконные менеджеры, bash-скриптинг и тонкие конфиги.</p>
         </div>
         <div class="m3-chip">
-          <div class="m3-chip-header">🖥️ Компьютеры</div>
-          <p>Оптимизация, сборка конфигураций, разгон и низкоуровневая настройка.</p>
+          <div class="m3-chip-header">🖥️ Архитектура ПК</div>
+          <p>Сборка, баланс компонентов i5 + RTX 40-й серии, разгон памяти и температурный менеджмент.</p>
         </div>
         <div class="m3-chip">
-          <div class="m3-chip-header">🎮 Гейминг</div>
-          <p>Сетевые баталии, интерактивные приключения и соревновательные игры.</p>
+          <div class="m3-chip-header">⚡ Инструменты разработки</div>
+          <p>Создание кастомных лаунчеров, автоматизация работы с файлами и манифестами Steam.</p>
         </div>
       </div>
     </section>
@@ -707,18 +993,36 @@
           <span class="spec-val">NVIDIA RTX 4060 Ti <span class="spec-tag">8 GB</span></span>
         </div>
         <div class="spec-row">
-          <span class="spec-name">🧠 ОЗУ</span>
+          <span class="spec-name">🧠 Оперативная память</span>
           <span class="spec-val">16 GB <span class="spec-tag">DDR5</span></span>
         </div>
         <div class="spec-row">
           <span class="spec-name">💽 Платформа</span>
-          <span class="spec-val">Windows 11 / Linux</span>
+          <span class="spec-val">Windows 11 / Linux x86_64</span>
+        </div>
+
+        <div class="hardware-monitor">
+          <div class="gauge-box">
+            <div class="gauge-header">
+              <span>Загрузка CPU</span>
+              <span class="gauge-val" id="cpuLoadText">24%</span>
+            </div>
+            <div class="gauge-bar-bg"><div class="gauge-bar-fill" id="cpuLoadBar" style="width: 24%;"></div></div>
+          </div>
+          <div class="gauge-box">
+            <div class="gauge-header">
+              <span>Загрузка GPU</span>
+              <span class="gauge-val" id="gpuLoadText">38%</span>
+            </div>
+            <div class="gauge-bar-bg"><div class="gauge-bar-fill" id="gpuLoadBar" style="width: 38%;"></div></div>
+          </div>
         </div>
       </div>
 
       <!-- Вариант 2: Fastfetch Terminal -->
       <div id="viewFastfetch">
-        <pre class="fastfetch-logo">
+        <div class="fastfetch-wrapper">
+          <pre class="fastfetch-logo">
 ################  ################
 ################  ################
 ################  ################
@@ -732,18 +1036,64 @@
 ################  ################
 ################  ################
 ################  ################
-        </pre>
-        <div class="fastfetch-info">
-          <div><span class="ff-user">moskvol</span>@<span class="ff-user">custom-rig</span></div>
-          <div class="ff-sep">------------------------</div>
-          <div><span class="ff-key">OS:</span> <span class="ff-val">Windows 11 / Linux x86_64</span></div>
-          <div><span class="ff-key">Host:</span> <span class="ff-val">Desktop PC</span></div>
-          <div><span class="ff-key">Kernel:</span> <span class="ff-val">10.0.22631 / 6.10.3-arch</span></div>
-          <div><span class="ff-key">Shell:</span> <span class="ff-val">bash 5.2.26</span></div>
-          <div><span class="ff-key">CPU:</span> <span class="ff-val">Intel(R) Core(TM) i5-13400F (16) @ 4.60GHz</span></div>
-          <div><span class="ff-key">GPU:</span> <span class="ff-val">NVIDIA GeForce RTX 4060 Ti [8GB GDDR6]</span></div>
-          <div><span class="ff-key">Memory:</span> <span class="ff-val">4812MiB / 16384MiB (DDR5)</span></div>
-          <div><span class="ff-key">Disk (/):</span> <span class="ff-val">120GiB / 1024GiB (NVMe SSD)</span></div>
+          </pre>
+          <div class="fastfetch-info">
+            <div><span class="ff-user">moskvol</span>@<span class="ff-user">custom-rig</span></div>
+            <div class="ff-sep">------------------------</div>
+            <div><span class="ff-key">OS:</span> <span class="ff-val">Windows 11 / Linux x86_64</span></div>
+            <div><span class="ff-key">Host:</span> <span class="ff-val">Desktop PC</span></div>
+            <div><span class="ff-key">Kernel:</span> <span class="ff-val">10.0.22631 / 6.10.3-arch</span></div>
+            <div><span class="ff-key">Shell:</span> <span class="ff-val">bash 5.2.26</span></div>
+            <div><span class="ff-key">CPU:</span> <span class="ff-val">Intel(R) Core(TM) i5-13400F (16) @ 4.60GHz</span></div>
+            <div><span class="ff-key">GPU:</span> <span class="ff-val">NVIDIA GeForce RTX 4060 Ti [8GB GDDR6]</span></div>
+            <div><span class="ff-key">Memory:</span> <span class="ff-val">4812MiB / 16384MiB (DDR5)</span></div>
+            <div><span class="ff-key">Disk (/):</span> <span class="ff-val">120GiB / 1024GiB (NVMe SSD)</span></div>
+          </div>
+        </div>
+
+        <div class="term-input-box">
+          <span style="color: var(--primary);">$</span>
+          <input type="text" id="termCmdInput" class="term-input" placeholder="Введите help, matrix, clear или ping..." onkeydown="handleTerminalCommand(event)">
+        </div>
+        <div id="termOutput" class="term-response">Подсказка: введите 'help' для списка консольных команд.</div>
+      </div>
+    </section>
+
+    <!-- Витрина любимых игр -->
+    <section>
+      <div class="section-label">Витрина игр (Favorites)</div>
+      <div class="games-showcase">
+        <div class="game-card">
+          <div class="game-card-title">🚗 BeamNG.drive</div>
+          <div class="game-card-desc">Физика деформации, моды, кастомные миссии.</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-title">🧟 Dying Light</div>
+          <div class="game-card-desc">Динамичный паркур, крафт и ночной выживач.</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-title">🔧 Garry's Mod</div>
+          <div class="game-card-desc">Lua-скриптинг, аддоны, сетевой сэндбокс.</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-title">⛏️ Minecraft</div>
+          <div class="game-card-desc">Fabric, Sodium, шейдеры и сборка серверов.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Быстрый генератор паролей -->
+    <section>
+      <div class="section-label">Безопасность (Password Generator)</div>
+      <div class="pass-generator-card">
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 0.88rem; font-weight: 700; color: #fff;">Быстрый пароль:</span>
+          <span style="font-size: 0.76rem; color: var(--on-surface-variant);">Сгенерирован криптографически надёжно</span>
+        </div>
+        <div class="pass-display" id="generatedPassword">K8#mQ9$xL2!vP4</div>
+        <div style="display: flex; gap: 8px;">
+          <button class="m3-action-chip" onclick="generateNewPassword()">Сгенерировать 🎲</button>
+          <button class="m3-action-chip" style="background: var(--surface-container-high); color: var(--on-surface);" onclick="copyGeneratedPassword(this)">Копировать</button>
         </div>
       </div>
     </section>
@@ -764,15 +1114,13 @@
     <section>
       <div class="section-label">Проекты и контакты</div>
       <div class="links-group">
-        <!-- Кнопка перехода на подробности SteamForge -->
         <button class="m3-button-card" onclick="openProjectDetails()">
           <div class="m3-btn-inner">
             <span>🔥 <strong>SteamForge</strong> (Steam Manifest Tool)</span>
           </div>
-          <span class="m3-action-chip">Подробнее →</span>
+          <span class="m3-action-chip">Открыть манифест-тул →</span>
         </button>
 
-        <!-- Steam Профиль -->
         <a href="https://steamcommunity.com/id/moskvol/" target="_blank" rel="noopener noreferrer" class="m3-button-card" onclick="openExternalLink(event)">
           <div class="m3-btn-inner">
             <span>🎮 Steam Профиль</span>
@@ -780,7 +1128,6 @@
           <span class="m3-action-chip">Открыть ↗</span>
         </a>
 
-        <!-- Discord -->
         <div class="m3-button-card">
           <div class="m3-btn-inner">
             <span>💬 Discord: <strong style="color: var(--primary);">moskvol1337</strong></span>
@@ -796,7 +1143,7 @@
 
   </main>
 
-  <!-- 4. ОТДЕЛЬНАЯ СТРАНИЦА-ВКЛАДКА: ПОДРОБНОСТИ STEAMFORGE -->
+  <!-- 4. ОТДЕЛЬНАЯ СТРАНИЦА: STEAMFORGE DETAILS + ИНТЕРАКТИВНЫЙ ГЕНЕРАТОР -->
   <main class="container" id="projectDetailsPage">
     
     <header class="profile-card">
@@ -812,6 +1159,48 @@
       <div class="section-label">О проекте</div>
       <div class="project-info-card">
         <p><strong>SteamForge</strong> — специализированный инструмент, предназначенный для сборки и прямой инъекции файлов манифестов (<code>appmanifest_*.acf</code>) и депо в директорию <code>steamapps</code>. Позволяет регистрировать и распознавать игровые файлы в официальном клиенте Steam без необходимости полной повторной загрузки из сети.</p>
+      </div>
+    </section>
+
+    <!-- Интерактивный генератор манифеста прямо в браузере -->
+    <section>
+      <div class="section-label">Интерактивный генератор AppManifest</div>
+      <div class="project-info-card">
+        <div class="forge-input-grid">
+          <div class="forge-field">
+            <label>Steam AppID:</label>
+            <input type="number" id="forgeAppId" class="forge-input" value="730" placeholder="730">
+          </div>
+          <div class="forge-field">
+            <label>Название игры (Name):</label>
+            <input type="text" id="forgeAppName" class="forge-input" value="Counter-Strike 2" placeholder="Игра">
+          </div>
+          <div class="forge-field">
+            <label>Папка установки (installdir):</label>
+            <input type="text" id="forgeInstallDir" class="forge-input" value="Counter-Strike Global Offensive" placeholder="Папка">
+          </div>
+          <div class="forge-field">
+            <label>Размер на диске (Байт):</label>
+            <input type="number" id="forgeSize" class="forge-input" value="34892819200">
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <button class="m3-action-chip" onclick="generateManifestAcf()">Сгенерировать ACF ⚡</button>
+          <button class="m3-action-chip" style="background: var(--surface-container-high); color: var(--on-surface);" onclick="downloadManifestFile()">Скачать файл .acf 📥</button>
+        </div>
+
+        <div class="code-snippet" id="forgeOutputAcf">"AppState"
+{
+  "appid" "730"
+  "Universe" "1"
+  "name" "Counter-Strike 2"
+  "installdir" "Counter-Strike Global Offensive"
+  "StateFlags" "4"
+  "BytesToDownload" "0"
+  "BytesDownloaded" "0"
+  "AutoUpdateBehavior" "0"
+}</div>
       </div>
     </section>
 
@@ -853,14 +1242,19 @@
 
     <section>
       <div class="section-label">Репозиторий на GitHub</div>
-      <div class="code-snippet">
-        git clone https://github.com/moskvol/steamforge.git
-      </div>
+      <div class="code-snippet">git clone https://github.com/moskvol/steamforge.git</div>
     </section>
 
     <section>
       <div class="section-label">Ссылки</div>
       <div class="links-group">
+        <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener noreferrer" class="m3-button-card" onclick="openExternalLink(event)">
+          <div class="m3-btn-inner">
+            <span>🌐 Официальный сайт SteamForge</span>
+          </div>
+          <span class="m3-action-chip">Открыть сайт ↗</span>
+        </a>
+
         <a href="https://github.com/moskvol/steamforge" target="_blank" rel="noopener noreferrer" class="m3-button-card" onclick="openExternalLink(event)">
           <div class="m3-btn-inner">
             <span>🐙 Исходный код на GitHub</span>
@@ -939,6 +1333,130 @@
       playClickSound();
     }
 
+    // === ЖИВОЙ МОНИТОРИНГ ЖЕЛЕЗА ===
+    function updateHardwareGauges() {
+      const cpu = Math.floor(18 + Math.random() * 22);
+      const gpu = Math.floor(30 + Math.random() * 25);
+      
+      const cpuBar = document.getElementById("cpuLoadBar");
+      const cpuTxt = document.getElementById("cpuLoadText");
+      const gpuBar = document.getElementById("gpuLoadBar");
+      const gpuTxt = document.getElementById("gpuLoadText");
+
+      if (cpuBar && cpuTxt) {
+        cpuBar.style.width = cpu + "%";
+        cpuTxt.textContent = cpu + "%";
+      }
+      if (gpuBar && gpuTxt) {
+        gpuBar.style.width = gpu + "%";
+        gpuTxt.textContent = gpu + "%";
+      }
+    }
+    setInterval(updateHardwareGauges, 3000);
+
+    // === ТАЙМЕР ИГРОВОЙ СЕССИИ ===
+    let sessionSeconds = 6138;
+    function updateLiveTimer() {
+      sessionSeconds++;
+      const h = String(Math.floor(sessionSeconds / 3600)).padStart(2, '0');
+      const m = String(Math.floor((sessionSeconds % 3600) / 60)).padStart(2, '0');
+      const s = String(sessionSeconds % 60).padStart(2, '0');
+      const el = document.getElementById("liveTimer");
+      if (el) el.textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateLiveTimer, 1000);
+
+    // === БЫСТРЫЙ ГЕНЕРАТОР ПАРОЛЕЙ ===
+    function generateNewPassword() {
+      initAudio();
+      playClickSound();
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*";
+      let res = "";
+      for (let i = 0; i < 14; i++) {
+        res += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      document.getElementById("generatedPassword").textContent = res;
+    }
+
+    function copyGeneratedPassword(btn) {
+      initAudio();
+      playClickSound();
+      const pass = document.getElementById("generatedPassword").textContent;
+      navigator.clipboard.writeText(pass).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "Скопировано!";
+        setTimeout(() => btn.textContent = orig, 1800);
+      });
+    }
+
+    // === ИНТЕРАКТИВНЫЙ ГЕНЕРАТОР ACF МАНИФЕСТОВ ДЛЯ STEAMFORGE ===
+    function generateManifestAcf() {
+      initAudio();
+      playClickSound();
+      const appId = document.getElementById("forgeAppId").value || "730";
+      const appName = document.getElementById("forgeAppName").value || "Game";
+      const dir = document.getElementById("forgeInstallDir").value || appName;
+      const size = document.getElementById("forgeSize").value || "34892819200";
+
+      const acfText = `"AppState"
+{
+  "appid" "${appId}"
+  "Universe" "1"
+  "name" "${appName}"
+  "installdir" "${dir}"
+  "StateFlags" "4"
+  "SizeOnDisk" "${size}"
+  "BytesToDownload" "0"
+  "BytesDownloaded" "0"
+  "AutoUpdateBehavior" "0"
+  "AllowOtherDownloadsWhileRunning" "0"
+  "UserConfig"
+  {
+    "language" "russian"
+  }
+}`;
+      document.getElementById("forgeOutputAcf").textContent = acfText;
+    }
+
+    function downloadManifestFile() {
+      initAudio();
+      playClickSound();
+      const appId = document.getElementById("forgeAppId").value || "730";
+      const content = document.getElementById("forgeOutputAcf").textContent;
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `appmanifest_${appId}.acf`;
+      a.click();
+    }
+
+    // === ИНТЕРАКТИВНЫЙ ТЕРМИНАЛ ===
+    function handleTerminalCommand(e) {
+      if (e.key === "Enter") {
+        const input = document.getElementById("termCmdInput");
+        const out = document.getElementById("termOutput");
+        const val = input.value.trim().toLowerCase();
+        initAudio();
+        playClickSound();
+
+        if (val === "help") {
+          out.textContent = "Доступные команды: \n- help: справка\n- clear: очистить\n- matrix: запустить матрицу\n- ping: пинг Steam\n- whoami: информация о пользователе";
+        } else if (val === "clear") {
+          out.textContent = "";
+        } else if (val === "whoami") {
+          out.textContent = "moskvol (UID: 1000, GID: 1000) [Admin, Developer, Gamer]";
+        } else if (val === "ping") {
+          out.textContent = "64 bytes from valve.steamcommunity.com: icmp_seq=1 ttl=56 time=14.2 ms";
+        } else if (val === "matrix") {
+          out.textContent = "01001101 01001111 01010011 01010011 01010110 01001111 01001100 // System Breached!";
+        } else {
+          out.textContent = `bash: command not found: ${val}. Введите 'help'.`;
+        }
+        input.value = "";
+      }
+    }
+
+    // === ТЕМЫ MATERIAL YOU ===
     const themePalettes = {
       blue: {
         dark: {
@@ -1178,7 +1696,7 @@
           osc.type = "sine";
           osc.frequency.setValueAtTime(note.freq, audioCtx.currentTime + note.start);
           gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + note.start);
-          gain.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + note.start + 0.08);
+          gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + note.start + 0.08);
           gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + note.start + note.dur);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
