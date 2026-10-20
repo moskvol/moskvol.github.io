@@ -1,1031 +1,1016 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>moskvol // Personal Station</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #9ecaff;
-      --on-primary: #003258;
-      --primary-container: #00497d;
-      --on-primary-container: #d1e4ff;
-      --surface: #111318;
-      --surface-container-lowest: #0c0e13;
-      --surface-container-low: #1a1c22;
-      --surface-container: #1e2027;
-      --surface-container-high: #282a31;
-      --surface-container-highest: #33353c;
-      --on-surface: #e2e2e9;
-      --on-surface-variant: #c3c7d0;
-      --outline: #8d9199;
-      --outline-variant: #43474e;
-      --radius-sm: 12px;
-      --radius-md: 20px;
-      --radius-lg: 28px;
-      --radius-pill: 9999px;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: #000000;
-      color: var(--on-surface);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 32px 16px;
-      transition: background-color 0.4s ease, color 0.4s ease;
-      overflow-x: hidden;
-    }
-
-    /* === 1. BIOS === */
-    #biosScreen {
-      position: fixed;
-      inset: 0;
-      background: #000000;
-      z-index: 10000;
-      color: #d0d7de;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.88rem;
-      line-height: 1.5;
-      padding: 30px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: default;
-      transition: opacity 0.4s ease;
-    }
-
-    #biosScreen.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .bios-top-banner {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 2px solid #333;
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .bios-lines {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .bios-line {
-      white-space: pre-wrap;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .bios-cursor {
-      display: inline-block;
-      width: 9px;
-      height: 15px;
-      background: #fff;
-      vertical-align: middle;
-      animation: blink 0.8s infinite;
-    }
-
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    .bios-footer {
-      border-top: 1px solid #333;
-      padding-top: 10px;
-      font-size: 0.78rem;
-      color: #8b949e;
-      display: flex;
-      justify-content: space-between;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* === 2. WINDOWS 11 BOOT === */
-    #winBootScreen {
-      position: fixed;
-      inset: 0;
-      background: #000000;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    #winBootScreen.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    #winBootScreen.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .win-logo {
-      display: grid;
-      grid-template-columns: 36px 36px;
-      grid-template-rows: 36px 36px;
-      gap: 5px;
-      margin-bottom: 75px;
-    }
-
-    .win-tile {
-      background: #0078d4;
-      border-radius: 1px;
-    }
-
-    .win-spinner {
-      position: relative;
-      width: 50px;
-      height: 50px;
-    }
-
-    .win-spinner .dot {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      opacity: 0;
-      transform: rotate(225deg);
-      animation: winSpin 5s cubic-bezier(0.12, 0.45, 0.32, 0.98) infinite;
-    }
-
-    .win-spinner .dot::after {
-      content: '';
-      position: absolute;
-      width: 5.5px;
-      height: 5.5px;
-      border-radius: 50%;
-      background: #ffffff;
-    }
-
-    .win-spinner .dot:nth-child(1) { animation-delay: 0.15s; }
-    .win-spinner .dot:nth-child(2) { animation-delay: 0.35s; }
-    .win-spinner .dot:nth-child(3) { animation-delay: 0.55s; }
-    .win-spinner .dot:nth-child(4) { animation-delay: 0.75s; }
-    .win-spinner .dot:nth-child(5) { animation-delay: 0.95s; }
-
-    @keyframes winSpin {
-      0% { transform: rotate(225deg); opacity: 1; animation-timing-function: cubic-bezier(0.12, 0.45, 0.32, 0.98); }
-      7% { transform: rotate(345deg); animation-timing-function: linear; }
-      30% { transform: rotate(455deg); animation-timing-function: cubic-bezier(0.12, 0.45, 0.32, 0.98); }
-      39% { transform: rotate(690deg); animation-timing-function: linear; }
-      70% { transform: rotate(815deg); opacity: 1; animation-timing-function: cubic-bezier(0.12, 0.45, 0.32, 0.98); }
-      75% { transform: rotate(945deg); animation-timing-function: cubic-bezier(0.12, 0.45, 0.32, 0.98); }
-      76% { transform: rotate(945deg); opacity: 0; }
-      100% { transform: rotate(945deg); opacity: 0; }
-    }
-
-    /* === 3. КОНТЕЙНЕР СТРАНИЦЫ === */
-    .container {
-      width: 100%;
-      max-width: 740px;
-      background: var(--surface);
-      border-radius: var(--radius-lg);
-      padding: 32px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 26px;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
-      opacity: 0;
-      transform: translateY(24px) scale(0.98);
-      transition: opacity 0.6s cubic-bezier(0.2, 0, 0, 1), transform 0.6s cubic-bezier(0.2, 0, 0, 1), background-color 0.4s ease;
-      z-index: 10;
-    }
-
-    .container.loaded {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    #projectDetailsPage {
-      display: none;
-    }
-
-    /* Верхний рекламный баннер SteamForge */
-    .steamforge-top-banner {
-      background: linear-gradient(135deg, var(--surface-container-high) 0%, var(--surface-container) 100%);
-      border: 1px solid var(--primary);
-      border-radius: var(--radius-md);
-      padding: 12px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--on-surface);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    .steamforge-top-banner:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      border-color: #ffffff;
-    }
-
-    .banner-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .banner-badge {
-      background: var(--primary);
-      color: var(--on-primary);
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: var(--radius-pill);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .banner-text {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--on-surface);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .banner-action {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--primary);
-      white-space: nowrap;
-    }
-
-    .profile-card {
-      background: var(--surface-container);
-      padding: 24px;
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      transition: background-color 0.4s ease;
-    }
-
-    .profile-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .top-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .profile-badge {
-      background: var(--primary-container);
-      color: var(--on-primary-container);
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    .view-mode-selector {
-      background: var(--surface-container-high);
-      padding: 4px;
-      border-radius: var(--radius-pill);
-      display: inline-flex;
-      gap: 4px;
-      transition: background-color 0.4s ease;
-    }
-
-    .view-btn {
-      background: transparent;
-      border: none;
-      color: var(--on-surface-variant);
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .view-btn.active {
-      background: var(--primary);
-      color: var(--on-primary);
-    }
-
-    .theme-mode-btn {
-      background: var(--surface-container-high);
-      border: none;
-      color: var(--on-surface);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      transition: background-color 0.2s, transform 0.15s ease;
-    }
-
-    .theme-mode-btn:hover {
-      transform: scale(1.08);
-    }
-
-    .profile-title {
-      font-size: 2.1rem;
-      font-weight: 800;
-      color: var(--on-surface);
-      letter-spacing: -0.5px;
-    }
-
-    .profile-subtitle {
-      font-size: 0.95rem;
-      color: var(--on-surface-variant);
-      line-height: 1.5;
-    }
-
-    .activity-banner {
-      background: var(--surface-container-low);
-      border: 1px solid var(--outline-variant);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .activity-pulse {
-      width: 12px;
-      height: 12px;
-      background: #3fb950;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #3fb950;
-      animation: pulseAnim 2s infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes pulseAnim {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(63, 185, 80, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 185, 80, 0); }
-    }
-
-    .activity-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-size: 0.82rem;
-    }
-
-    .activity-info strong {
-      color: var(--on-surface);
-      font-size: 0.88rem;
-    }
-
-    .activity-timer {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--primary);
-    }
-
-    .section-label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      margin-bottom: 12px;
-      transition: color 0.4s ease;
-    }
-
-    .chips-group {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    .m3-chip {
-      background: var(--surface-container-low);
-      padding: 18px 20px;
-      border-radius: var(--radius-md);
-      transition: background-color 0.4s ease, transform 0.2s;
-    }
-
-    .m3-chip:hover {
-      background: var(--surface-container-high);
-      transform: translateY(-2px);
-    }
-
-    .m3-chip-header {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--on-surface);
-      margin-bottom: 6px;
-    }
-
-    .m3-chip p {
-      font-size: 0.82rem;
-      color: var(--on-surface-variant);
-      line-height: 1.45;
-    }
-
-    .hardware-monitor {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 580px) {
-      .hardware-monitor { grid-template-columns: 1fr; }
-    }
-
-    .gauge-box {
-      background: var(--surface-container-high);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .gauge-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: var(--on-surface-variant);
-      font-weight: 600;
-    }
-
-    .gauge-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .gauge-bar-bg {
-      width: 100%;
-      height: 6px;
-      background: var(--surface-container-lowest);
-      border-radius: var(--radius-pill);
-      overflow: hidden;
-    }
-
-    .gauge-bar-fill {
-      height: 100%;
-      background: var(--primary);
-      border-radius: var(--radius-pill);
-      transition: width 0.8s ease;
-    }
-
-    /* Режим 1: Material You */
-    #viewMaterial {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      background: var(--surface-container-low);
-      border-radius: var(--radius-md);
-      padding: 22px;
-      transition: background-color 0.4s ease;
-    }
-
-    .spec-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--outline-variant);
-    }
-
-    .spec-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .spec-name {
-      font-size: 0.88rem;
-      color: var(--on-surface-variant);
-      font-weight: 600;
-    }
-
-    .spec-val {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--on-surface);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .spec-tag {
-      background: var(--primary-container);
-      color: var(--on-primary-container);
-      font-size: 0.72rem;
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-      margin-left: 6px;
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    /* Режим 2: Fastfetch + Терминал интерактива */
-    #viewFastfetch {
-      display: none;
-      background: #090d12;
-      border: 1px solid var(--outline-variant);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      flex-direction: column;
-      gap: 16px;
-      overflow-x: auto;
-    }
-
-    .fastfetch-wrapper {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .fastfetch-logo {
-      color: var(--primary);
-      font-size: 0.7rem;
-      line-height: 1.15;
-      white-space: pre;
-      user-select: none;
-      flex-shrink: 0;
-      font-family: 'JetBrains Mono', monospace;
-      transition: color 0.3s ease;
-    }
-
-    .fastfetch-info {
-      font-size: 0.82rem;
-      line-height: 1.55;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      white-space: nowrap;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .ff-user { color: var(--primary); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-    .ff-sep { color: var(--outline-variant); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
-    .ff-key { color: var(--primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-    .ff-val { color: #f0f6fc; font-family: 'JetBrains Mono', monospace; }
-
-    .term-input-box {
-      border-top: 1px solid var(--outline-variant);
-      padding-top: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-    }
-
-    .term-input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #ffffff;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      flex-grow: 1;
-    }
-
-    .term-response {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: #3fb950;
-      white-space: pre-wrap;
-    }
-
-    .games-showcase {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-    }
-
-    .game-card {
-      background: var(--surface-container-low);
-      border: 1px solid var(--outline-variant);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .game-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-    }
-
-    .game-card-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--on-surface);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .game-card-desc {
-      font-size: 0.75rem;
-      color: var(--on-surface-variant);
-    }
-
-    .pass-generator-card {
-      background: var(--surface-container-low);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .pass-display {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 1px;
-      background: var(--surface-container-lowest);
-      padding: 8px 16px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--outline-variant);
-      min-width: 180px;
-      text-align: center;
-      user-select: all;
-    }
-
-    .palette-container {
-      background: var(--surface-container);
-      padding: 14px 20px;
-      border-radius: var(--radius-pill);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: background-color 0.4s ease;
-    }
-
-    .palette-title {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--on-surface-variant);
-    }
-
-    .palette-swatches {
-      display: flex;
-      gap: 8px;
-    }
-
-    .color-swatch {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .color-swatch:hover { transform: scale(1.18); }
-    .color-swatch.active { border-color: var(--on-surface); transform: scale(1.15); }
-
-    .links-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .m3-button-card {
-      background: var(--surface-container);
-      padding: 16px 20px;
-      border-radius: var(--radius-md);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-decoration: none;
-      color: var(--on-surface);
-      transition: background-color 0.4s ease, transform 0.2s;
-      cursor: pointer;
-      border: none;
-      width: 100%;
-      text-align: left;
-    }
-
-    .m3-button-card:hover {
-      background: var(--surface-container-high);
-      transform: translateY(-2px);
-    }
-
-    .m3-btn-inner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .m3-action-chip {
-      background: var(--primary);
-      color: var(--on-primary);
-      padding: 8px 16px;
-      border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.2s, background-color 0.4s ease, color 0.4s ease;
-    }
-
-    .m3-action-chip:hover { opacity: 0.9; }
-
-    /* === СТИЛИ СТРАНИЦЫ STEAMFORGE DETAILS === */
-    .project-hero-badge {
-      align-self: flex-start;
-      background: var(--primary-container);
-      color: var(--on-primary-container);
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .project-info-card {
-      background: var(--surface-container-low);
-      padding: 22px;
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      line-height: 1.6;
-    }
-
-    .project-features-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      list-style: none;
-    }
-
-    .project-features-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 0.92rem;
-      color: var(--on-surface);
-      line-height: 1.5;
-    }
-
-    .project-features-list li .item-icon {
-      font-size: 1.15rem;
-      line-height: 1.3;
-      flex-shrink: 0;
-    }
-
-    .project-features-list li .item-content {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .project-features-list li strong {
-      color: #ffffff;
-      font-weight: 700;
-    }
-
-    .forge-input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    @media (max-width: 540px) {
-      .forge-input-grid { grid-template-columns: 1fr; }
-    }
-
-    .forge-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .forge-field label {
-      font-size: 0.76rem;
-      font-weight: 600;
-      color: var(--on-surface-variant);
-    }
-
-    .forge-input {
-      background: var(--surface-container-highest);
-      border: 1px solid var(--outline-variant);
-      border-radius: 8px;
-      padding: 8px 12px;
-      color: #ffffff;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      outline: none;
-    }
-
-    .code-snippet {
-      background: #090d12;
-      border: 1px solid var(--outline-variant);
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: var(--primary);
-      white-space: pre-wrap;
-      user-select: all;
-      max-height: 220px;
-      overflow-y: auto;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--on-surface-variant);
-      font-family: 'JetBrains Mono', monospace;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>fastfetch: moskvol // station v2.5</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --bg-alt: #16161e;
+    --bg-hl: #24283b;
+    --fg: #c0caf5;
+    --accent: #7aa2f7;
+    --key: #bb9af7;
+    --dim: #565f89;
+    --green: #9ece6a;
+    --yellow: #e0af68;
+    --red: #f7768e;
+    --cyan: #7dcfff;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  body {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    padding: calc(env(safe-area-inset-top, 0px) + 16px) 14px calc(env(safe-area-inset-bottom, 0px) + 36px);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* === 1. BIOS POST SCREEN === */
+  #biosScreen {
+    position: fixed;
+    inset: 0;
+    background: #000000;
+    z-index: 10000;
+    color: #c0caf5;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 24px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: opacity 0.35s ease;
+  }
+
+  #biosScreen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bios-top {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    color: var(--accent);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .bios-footer {
+    border-top: 1px solid #333;
+    padding-top: 10px;
+    color: var(--yellow);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .bios-key-btn {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--cyan);
+  }
+
+  /* === 2. BIOS BOOT MENU === */
+  #biosMenuScreen {
+    position: fixed;
+    inset: 0;
+    background: #11121a;
+    color: var(--fg);
+    z-index: 10001;
+    padding: 24px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .boot-box {
+    border: 1px solid var(--dim);
+    background: var(--bg);
+    padding: 20px;
+    max-width: 580px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  }
+
+  .boot-title {
+    color: var(--yellow);
+    font-weight: bold;
+    border-bottom: 1px solid var(--dim);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+
+  .boot-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .boot-item:hover, .boot-item.active {
+    border-color: var(--accent);
+    background: rgba(122, 162, 247, 0.14);
+    color: var(--cyan);
+  }
+
+  /* === 3. ЭКРАН ПОСАДКИ LINUX TUX === */
+  #tuxBootModal {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .tux-big-ascii {
+    color: var(--yellow);
+    white-space: pre;
+    font-size: 16px;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  /* === 4. CMATRIX & KERNEL PANIC OVERLAYS === */
+  #matrixCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 9995;
+    display: none;
+    background: #000;
+    cursor: pointer;
+  }
+
+  #panicOverlay {
+    position: fixed;
+    inset: 0;
+    background: #000088;
+    color: #ffffff;
+    z-index: 10005;
+    padding: 32px;
+    font-family: inherit;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  /* === 5. TOP STATUS BAR & AUDIO PLAYER === */
+  .tmux-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: var(--bg-alt);
+    border: 1px solid var(--bg-hl);
+    padding: 6px 12px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .tmux-left, .tmux-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tmux-tag {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: bold;
+    padding: 1px 7px;
+  }
+
+  .top-notice {
+    margin: 0 0 14px;
+    padding: 8px 12px;
+    background: var(--bg-alt);
+    border-left: 3px solid var(--accent);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .top-notice a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .top-notice a:hover {
+    text-decoration: underline;
+  }
+
+  /* === 6. ОСНОВНОЙ FASTFETCH БЛОК === */
+  .prompt {
+    color: var(--green);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .cmd { color: var(--fg); }
+
+  .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    margin-top: 12px;
+    max-width: 940px;
+  }
+
+  .logo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+
+  .logo {
+    color: var(--yellow);
+    white-space: pre;
+    font-size: 13px;
+    line-height: 1.3;
+    margin: 0;
+    user-select: none;
+    transition: color 0.3s;
+  }
+
+  .distro-switcher {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .distro-btn {
+    background: var(--bg-alt);
+    border: 1px solid var(--dim);
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 11px;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+
+  .distro-btn:hover, .distro-btn.active {
+    border-color: var(--accent);
+    color: var(--cyan);
+  }
+
+  .info {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
+  .user { color: var(--accent); font-weight: bold; }
+  .at { color: var(--fg); }
+  .host { color: var(--accent); font-weight: bold; }
+  .sep { color: var(--dim); white-space: pre; }
+  .line { white-space: pre-wrap; word-break: break-word; }
+  .key { color: var(--key); font-weight: bold; }
+  .val { color: var(--fg); }
+  .tag { color: var(--green); }
+
+  .palette {
+    margin-top: 16px;
+    display: flex;
+    gap: 0;
+    align-items: center;
+  }
+
+  .palette span {
+    width: 24px;
+    height: 15px;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .palette span:hover {
+    transform: scaleY(1.35);
+  }
+
+  .links {
+    margin-top: 16px;
+    line-height: 1.85;
+  }
+
+  .links a, .links button.link-btn {
+    color: var(--cyan);
+    text-decoration: none;
+    background: none;
+    border: none;
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .links a:hover, .links a:focus,
+  .links button.link-btn:hover {
+    text-decoration: underline;
+    color: var(--yellow);
+  }
+
+  /* === 7. МОДУЛИ (STEAMFORGE, BTOP, ARCH VPN, PASSGEN) === */
+  .term-module {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: var(--bg-alt);
+    border: 1px solid var(--bg-hl);
+    border-left: 3px solid var(--key);
+    display: none;
+  }
+
+  .term-module.open {
+    display: block;
+  }
+
+  .module-header {
+    color: var(--yellow);
+    font-weight: bold;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px dashed var(--dim);
+    padding-bottom: 6px;
+  }
+
+  .term-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .term-field label {
+    display: block;
+    color: var(--key);
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+
+  .term-input-field {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--dim);
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 5px 8px;
+    outline: none;
+  }
+
+  .term-input-field:focus {
+    border-color: var(--accent);
+  }
+
+  .term-btn {
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 12px;
+    padding: 4px 10px;
+    cursor: pointer;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    transition: all 0.15s;
+  }
+
+  .term-btn:hover, .term-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: bold;
+  }
+
+  .acf-dual-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .acf-dual-box { grid-template-columns: 1fr; }
+  }
+
+  .acf-pre {
+    background: #11121a;
+    border: 1px solid var(--dim);
+    padding: 10px;
+    color: var(--green);
+    font-size: 12px;
+    overflow-x: auto;
+    margin: 0;
+    white-space: pre;
+  }
+
+  /* BTOP System Monitor */
+  .btop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .btop-grid { grid-template-columns: 1fr; }
+  }
+
+  .btop-box {
+    background: var(--bg);
+    border: 1px solid var(--dim);
+    padding: 10px;
+  }
+
+  .btop-bar-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    white-space: pre;
+  }
+
+  .btop-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  .btop-table th {
+    text-align: left;
+    color: var(--key);
+    border-bottom: 1px solid var(--dim);
+    padding: 3px 4px;
+  }
+
+  .btop-table td {
+    padding: 3px 4px;
+  }
+
+  /* Интерактивная командная строка */
+  .live-shell-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    cursor: text;
+  }
+
+  .shell-input {
+    background: transparent;
+    border: none;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    width: 1px;
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.05em;
+    background: var(--fg);
+    vertical-align: text-bottom;
+    animation: blink 1s steps(1) infinite;
+    margin-left: 1px;
+  }
+
+  .quick-cmds {
+    margin-top: 10px;
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .quick-cmds span {
+    color: var(--key);
+    cursor: pointer;
+    text-decoration: underline;
+    margin-right: 10px;
+    display: inline-block;
+  }
+
+  .quick-cmds span:hover {
+    color: var(--cyan);
+  }
+
+  #shellHistory {
+    margin-top: 14px;
+    white-space: pre-wrap;
+    color: var(--fg);
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  @media (max-width: 480px) {
+    body { font-size: 13px; }
+    .logo { font-size: 11px; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- 1. Экран BIOS -->
-  <div id="biosScreen">
-    <div>
-      <div class="bios-top-banner">
-        <span>MOSKVOL UEFI BIOS POST v2.40</span>
-        <span>ACPI x64 READY</span>
-      </div>
-      <div class="bios-lines" id="biosOutput"></div>
+<!-- 1. BIOS POST SCREEN -->
+<div id="biosScreen">
+  <div>
+    <div class="bios-top">
+      <span>MOSKVOL UEFI BIOS v2.50 (Tokyo Night Firmware)</span>
+      <span>i5-13400F // RTX 4060 Ti</span>
     </div>
-    <div class="bios-footer">
-      <span>DEL: Setup | F11: Boot Menu | F12: Network Boot</span>
-      <span>Energy Star Compliant</span>
+    <div id="biosLogs"></div>
+  </div>
+  <div class="bios-footer">
+    <span>Нажмите <span class="bios-key-btn" onclick="openBootMenu()">[F11]</span> или <span class="bios-key-btn" onclick="openBootMenu()">[DEL]</span> для входа в Boot Menu (Флешка Linux Tux)</span>
+    <span class="bios-key-btn" onclick="finishBoot('arch')">Пропустить [ESC]</span>
+  </div>
+</div>
+
+<!-- 2. BOOT MENU (ВЫБОР ФЛЕШКИ LINUX / СИСТЕМЫ) -->
+<div id="biosMenuScreen">
+  <div class="boot-box">
+    <div class="boot-title">=== UEFI Boot Device Menu ===</div>
+    <div class="boot-item active" onclick="bootTuxLanding()">
+      <span>[1] USB: Arch Linux Live ISO (x86_64) — Посадка с пингвином Tux</span>
+      <span>[USB 3.2]</span>
+    </div>
+    <div class="boot-item" onclick="finishBoot('arch')">
+      <span>[2] NVMe: Arch Linux / Hyprland (fastfetch)</span>
+      <span>[M.2 SSD]</span>
+    </div>
+    <div class="boot-item" onclick="finishBoot('cachy')">
+      <span>[3] NVMe: CachyOS Bore-Kernel Gaming</span>
+      <span>[M.2 SSD]</span>
+    </div>
+    <div class="boot-item" onclick="finishBoot('win')">
+      <span>[4] NVMe: Windows 11 Pro Boot Manager</span>
+      <span>[M.2 SSD]</span>
+    </div>
+    <div style="margin-top: 12px; color: var(--dim); font-size: 12px; display:flex; justify-content:space-between;">
+      <span>Кликните для загрузки устройства</span>
+      <span class="bios-key-btn" onclick="toggleSkipBiosPref()" id="skipBiosLabel">Авто-пропуск BIOS: ВЫКЛ</span>
+    </div>
+  </div>
+</div>
+
+<!-- 3. ЭКРАН ПОСАДКИ LINUX TUX (ПОСЕРЕДИНЕ ЭКРАНА) -->
+<div id="tuxBootModal">
+<pre class="tux-big-ascii">
+         .--.
+        |o_o |
+        |:_/ |
+       //   \ \
+      (|     | )
+     /'\_   _/`\
+     \___)=(___/
+</pre>
+  <div style="color: var(--green); font-weight: bold; margin-bottom: 6px;">
+    [ OK ] Загружен Arch Linux Live USB (Kernel 6.10.3-zen1-1)
+  </div>
+  <div style="color: var(--dim); max-width: 480px; margin-bottom: 18px; font-size: 13px;">
+    Туннель Arch VPN подключен. Окружение Kitty + Fastfetch готово к работе.
+  </div>
+  <div>
+    <button class="term-btn" onclick="closeTuxLanding()">Войти в систему (fastfetch) ↵</button>
+    <button class="term-btn" onclick="location.reload()">Перезагрузка (Reboot)</button>
+  </div>
+</div>
+
+<!-- 4. CMATRIX FULLSCREEN CANVAS -->
+<canvas id="matrixCanvas" onclick="stopMatrix()" title="Нажмите в любом месте или ESC для выхода"></canvas>
+
+<!-- 5. KERNEL PANIC EASTER EGG -->
+<div id="panicOverlay">
+  <div style="background:#fff; color:#000088; font-weight:bold; padding:2px 8px; margin-bottom:14px;">
+    KERNEL PANIC: VFS: Unable to mount root fs on unknown-block(0,0)
+  </div>
+  <div>
+    [    0.000000] Call Trace:<br>
+    [    0.000042]  &lt;TASK&gt;<br>
+    [    0.000105]  dump_stack_lvl+0x48/0x60<br>
+    [    0.000189]  panic+0x118/0x290<br>
+    [    0.000240]  moskvol_rm_rf_root+0x1337/0x1337<br>
+    [    0.000310] ---[ end Kernel panic - not syncing: Attempted to kill init! ]---
+  </div>
+  <button class="term-btn" style="margin-top:20px; border-color:#fff; color:#fff;" onclick="document.getElementById('panicOverlay').style.display='none'">
+    [ Восстановить систему из снапшота Btrfs ]
+  </button>
+</div>
+
+<!-- 6. ВЕРХНЯЯ ПАНЕЛЬ TMUX / КЛАВИАТУРА / ПЛЕЕР -->
+<div class="tmux-bar">
+  <div class="tmux-left">
+    <span class="tmux-tag">0:kitty*</span>
+    <span style="color:var(--green)">● Arch VPN: Connected</span>
+    <span style="color:var(--dim)" id="liveClock">12:00:00</span>
+  </div>
+  <div class="tmux-right">
+    <button class="distro-btn" onclick="cycleKeySound()" id="soundModeBtn" title="Звук клавиш">⌨️ Звук: Aula F75 Thock</button>
+    <button class="distro-btn" onclick="toggleChiptune()" id="musicBtn" title="Фоновый Synthwave бит">🎵 Synth: OFF</button>
+    <button class="distro-btn" onclick="openBootMenu()" title="Открыть меню BIOS">⚙️ BIOS</button>
+  </div>
+</div>
+
+<!-- ВЕРХНИЙ АНОНС ПРОЕКТОВ -->
+<div class="top-notice">
+  <span>🔥 <strong>SteamForge</strong> — программа для создания и внедрения манифестов в Steam</span>
+  <span>
+    <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener">Сайт SteamForge ↗</a> · 
+    <a href="https://t.me/ArchVpnChanel" target="_blank" rel="noopener">🛡️ Arch VPN ↗</a>
+  </span>
+</div>
+
+<!-- КОМАНДА FASTFETCH -->
+<div class="prompt"><span class="user">moskvol</span><span class="at">@</span><span class="host" id="promptHost">arch-box</span>
+<span class="cmd">~ \$ fastfetch</span></div>
+
+<div class="wrap">
+  <div class="logo-col">
+<pre class="logo" id="asciiLogo" aria-hidden="true">         .--.
+        |o_o |
+        |:_/ |
+       //   \ \
+      (|     | )
+     /'\_   _/`\
+     \___)=(___/</pre>
+    <div class="distro-switcher">
+      <button class="distro-btn active" onclick="setAsciiLogo('tux', this)">Tux</button>
+      <button class="distro-btn" onclick="setAsciiLogo('arch', this)">Arch</button>
+      <button class="distro-btn" onclick="setAsciiLogo('cachy', this)">Cachy</button>
+      <button class="distro-btn" onclick="setAsciiLogo('win', this)">Win11</button>
     </div>
   </div>
 
-  <!-- 2. Экран Windows 11 Boot -->
-  <div id="winBootScreen">
-    <div class="win-logo">
-      <div class="win-tile"></div>
-      <div class="win-tile"></div>
-      <div class="win-tile"></div>
-      <div class="win-tile"></div>
+  <div class="info">
+    <div class="line"><span class="user">moskvol</span><span class="at">@</span><span class="host" id="infoHost">arch-box</span></div>
+    <div class="line"><span class="sep">-------------------</span></div>
+    <div class="line"><span class="key">Имя</span><span class="sep">        </span>  <span class="val">Даниил (moskvol)</span></div>
+    <div class="line"><span class="key">Хобби</span><span class="sep">      </span>  <span class="val">Linux, open source, терминал, гейминг</span></div>
+    <div class="line"><span class="key">OS</span><span class="sep">         </span>  <span class="val" id="osVal">Arch Linux / CachyOS / Windows 11 x86_64</span></div>
+    <div class="line"><span class="key">Ядро</span><span class="sep">       </span>  <span class="val">6.10.3-zen (любимое и быстрое)</span></div>
+    <div class="line"><span class="key">Оболочка</span><span class="sep">    </span>  <span class="val">zsh 5.9 / bash 5.2</span></div>
+    <div class="line"><span class="key">WM / DE</span><span class="sep">    </span>  <span class="val">Hyprland / KDE Plasma (Wayland)</span></div>
+    <div class="line"><span class="key">Терминал</span><span class="sep">   </span>  <span class="val">Kitty + Fastfetch</span></div>
+    <div class="line"><span class="key">Плата</span><span class="sep">      </span>  <span class="val">MSI B760 GAMING PLUS WIFI</span></div>
+    <div class="line"><span class="key">CPU</span><span class="sep">        </span>  <span class="val">Intel Core i5-13400F (16) @ 4.60GHz</span> <span class="tag" id="cpuStat">[19%]</span></div>
+    <div class="line"><span class="key">GPU</span><span class="sep">        </span>  <span class="val">NVIDIA GeForce RTX 4060 Ti (8GB)</span> <span class="tag" id="gpuStat">[31%]</span></div>
+    <div class="line"><span class="key">Память</span><span class="sep">     </span>  <span class="val" id="ramStat">4812MiB / 16384MiB (DDR5)</span></div>
+    <div class="line"><span class="key">Дисплей</span><span class="sep">    </span>  <span class="val">ASUS VG249Q1A 144Hz + Acer 75Hz</span></div>
+    <div class="line"><span class="key">Клавиатура</span><span class="sep"> </span>  <span class="val">Aula F75 (Gasket Mount)</span></div>
+    <div class="line"><span class="key">Uptime</span><span class="sep">     </span>  <span class="val" id="uptimeVal">2 hours, 18 mins (чем дольше, тем лучше)</span></div>
+    <div class="line"><span class="key">Проекты</span><span class="sep">    </span>  <span class="val">SteamForge (Manifest Tool) &amp; Arch VPN</span></div>
+    <div class="line"><span class="key">Статус</span><span class="sep">     </span>  <span class="val" id="presenceVal">В игре: BeamNG.drive / CS2</span> <button class="distro-btn" onclick="cycleGamePresence()">Сменить ↻</button></div>
+    <div class="line"><span class="key">Любимое</span><span class="sep">    </span>  <span class="val">Собирать систему и софт под себя с нуля</span></div>
+
+    <!-- Цветовая палитра (кликабельная) -->
+    <div class="palette" title="Нажми на цвет для смены акцента (крайние меняют Dark/Light тему)">
+      <span style="background:#1a1b26" onclick="setThemeMode('dark')" title="Dark Mode"></span><span style="background:#f7768e" onclick="setAccent('#f7768e')"></span><span style="background:#9ece6a" onclick="setAccent('#9ece6a')"></span><span style="background:#e0af68" onclick="setAccent('#e0af68')"></span><span style="background:#7aa2f7" onclick="setAccent('#7aa2f7')"></span><span style="background:#bb9af7" onclick="setAccent('#bb9af7')"></span><span style="background:#7dcfff" onclick="setAccent('#7dcfff')"></span><span style="background:#c0caf5" onclick="setThemeMode('light')" title="Light Mode"></span>
     </div>
-    <div class="win-spinner">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+
+    <!-- Ссылки и интерактивные модули -->
+    <div class="links line">
+      <button class="link-btn" onclick="toggleModule('steamforgeModule')">🛠️ [SteamForge Studio]</button>  ·  
+      <button class="link-btn" onclick="toggleModule('vpnModule')">🛡️ [Arch VPN &amp; Speedtest]</button>  ·  
+      <button class="link-btn" onclick="toggleModule('btopModule')">📊 [Монитор btop]</button>  ·  
+      <button class="link-btn" onclick="toggleModule('toolsModule')">🔐 [Утилиты]</button><br>
+      <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener">Сайт SteamForge ↗</a>  ·  
+      <a href="https://github.com/moskvol/steamforge" target="_blank" rel="noopener">GitHub ↗</a>  ·  
+      <a href="https://t.me/ArchVpnChanel" target="_blank" rel="noopener">Telegram Arch VPN ↗</a>  ·  
+      <a href="https://steamcommunity.com/id/moskvol/" target="_blank" rel="noopener">Steam ↗</a>  ·  
+      <button class="link-btn" onclick="copyDiscord(this)">Discord: moskvol1337</button>
+    </div>
+  </div>
+</div>
+
+<!-- МОДУЛЬ 1: STEAMFORGE STUDIO (.ACF + .LUA ГЕНЕРАТОР) -->
+<div id="steamforgeModule" class="term-module">
+  <div class="module-header">
+    <span>=== 🔥 SteamForge v2.5: Инъектор и генератор манифестов (.acf + .lua) ===</span>
+    <button class="term-btn" onclick="toggleModule('steamforgeModule')">[x] Закрыть</button>
+  </div>
+  <div class="line" style="margin-bottom: 10px;">
+    • <span class="key">Генерация манифестов:</span> Автоматическое формирование валидных файлов <code>appmanifest</code> под нужные AppID и DepotID.<br>
+    • <span class="key">Внедрение в Steam:</span> Быстрое добавление манифестов в библиотеки Steam в один клик без ручного редактирования ACF.<br>
+    • <span class="key">Патчинг и верификация:</span> Проверка контрольных сумм и структуры депо перед интеграцией в систему.<br>
+    • <span class="key">Работа в стиле SteamTools:</span> Понятный процесс инъекции манифестов с поддержкой актуальных версий клиента.
+  </div>
+
+  <div style="margin-bottom: 10px;">
+    <span style="color:var(--dim); font-size:12px;">Быстрые пресеты игр:</span>
+    <button class="distro-btn" onclick="applyGamePreset('730', 'Counter-Strike 2', 'Counter-Strike Global Offensive', '35840120800', '731')">CS2</button>
+    <button class="distro-btn" onclick="applyGamePreset('284160', 'BeamNG.drive', 'BeamNG.drive', '48210400000', '284161')">BeamNG.drive</button>
+    <button class="distro-btn" onclick="applyGamePreset('4000', 'Garrys Mod', 'GarrysMod', '8420100000', '4001')">Garry's Mod</button>
+    <button class="distro-btn" onclick="applyGamePreset('239140', 'Dying Light', 'Dying Light', '41200000000', '239141')">Dying Light</button>
+    <button class="distro-btn" onclick="applyGamePreset('271590', 'Grand Theft Auto V', 'Grand Theft Auto V', '115400000000', '271591')">GTA V</button>
+  </div>
+
+  <div class="term-grid">
+    <div class="term-field">
+      <label>AppID:</label>
+      <input type="number" id="acfAppId" class="term-input-field" value="730" oninput="updateAcfPreview()">
+    </div>
+    <div class="term-field">
+      <label>DepotID:</label>
+      <input type="number" id="acfDepotId" class="term-input-field" value="731" oninput="updateAcfPreview()">
+    </div>
+    <div class="term-field">
+      <label>Название игры (name):</label>
+      <input type="text" id="acfName" class="term-input-field" value="Counter-Strike 2" oninput="updateAcfPreview()">
+    </div>
+    <div class="term-field">
+      <label>Папка (installdir):</label>
+      <input type="text" id="acfDir" class="term-input-field" value="Counter-Strike Global Offensive" oninput="updateAcfPreview()">
     </div>
   </div>
 
-  <!-- 3. ГЛАВНАЯ СТРАНИЦА ПРОФИЛЯ -->
-  <main class="container" id="mainContainer">
-    
-    <!-- Самый верхний блок-ссылка на сайт проекта SteamForge -->
-    <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener noreferrer" class="steamforge-top-banner" onclick="openExternalLink(event)">
-      <div class="banner-left">
-        <span class="banner-badge">Мой проект</span>
-        <span class="banner-text">🔥 <strong>SteamForge</strong> — утилита для внедрения манифестов Steam</span>
-      </div>
-      <div class="banner-action">
-        <span>Перейти на сайт</span>
-        <span>↗</span>
-      </div>
-    </a>
+  <div>
+    <button class="term-btn" onclick="downloadAcf()">Скачать appmanifest.acf 📥</button>
+    <button class="term-btn" onclick="downloadLua()">Скачать скрипт .lua 📜</button>
+    <button class="term-btn" onclick="copyAcf(this)">Копировать ACF</button>
+    <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener" class="term-btn" style="text-decoration:none; display:inline-block;">Официальный сайт SteamForge ↗</a>
+  </div>
 
-    <header class="profile-card">
-      <div class="profile-top-row">
-        <span class="profile-badge">Dual Interface Station</span>
-        
-        <div class="top-controls">
-          <div class="view-mode-selector">
-            <button class="view-btn active" id="btnMaterial" onclick="switchView('material')">Material</button>
-            <button class="view-btn" id="btnFastfetch" onclick="switchView('fastfetch')">Fastfetch</button>
-          </div>
-          <button class="theme-mode-btn" id="themeModeToggle" onclick="toggleLightDarkMode()" title="Переключить тему">🌙</button>
-        </div>
-      </div>
+  <div class="acf-dual-box">
+    <pre class="acf-pre" id="acfOutput"></pre>
+    <pre class="acf-pre" id="luaOutput" style="color:var(--cyan);"></pre>
+  </div>
+</div>
 
-      <h1 class="profile-title">Привет, я moskvol 👋</h1>
-      <p class="profile-subtitle">Энтузиаст открытого ПО, кастомизации ОС, производительного железа и сетевого гейминга.</p>
+<!-- МОДУЛЬ 2: ARCH VPN & SPEEDTEST -->
+<div id="vpnModule" class="term-module">
+  <div class="module-header">
+    <span>=== 🛡️ Arch VPN: Панель туннеля VLESS / Reality &amp; Тест скорости ===</span>
+    <button class="term-btn" onclick="toggleModule('vpnModule')">[x] Закрыть</button>
+  </div>
+  <div class="line" style="margin-bottom: 10px;">
+    Протокол: <span class="tag">Xray VLESS + Reality (XTLS-RPRX-Vision)</span> | Шифрование: <span class="key">TLS 1.3</span> | Канал: <a href="https://t.me/ArchVpnChanel" target="_blank" style="color:var(--cyan);">@ArchVpnChanel</a>
+  </div>
+  <div style="margin-bottom: 12px;">
+    <span>Локация узла: </span>
+    <button class="term-btn active" id="nodeNL" onclick="selectVpnNode('NL', 'Нидерланды (Амстердам) — 18 ms', this)">🇳🇱 NL-Amsterdam</button>
+    <button class="term-btn" id="nodeDE" onclick="selectVpnNode('DE', 'Германия (Франкфурт) — 22 ms', this)">🇩🇪 DE-Frankfurt</button>
+    <button class="term-btn" id="nodeFI" onclick="selectVpnNode('FI', 'Финляндия (Хельсинки) — 14 ms', this)">🇫🇮 FI-Helsinki</button>
+    <button class="term-btn" onclick="runVpnSpeedtest()">🚀 Запустить Speedtest</button>
+  </div>
+  <pre class="acf-pre" id="vpnConsoleOut">[Arch VPN Daemon] Узел: Нидерланды (Амстердам) — 18 ms
+Статус: Обход DPI активен (YouTube 4K / Discord Voice / Steam без ограничений)
+Нажмите «Запустить Speedtest» для замера пропускной способности канала.</pre>
+</div>
 
-      <!-- Live Activity Status -->
-      <div class="activity-banner">
-        <div class="activity-pulse"></div>
-        <div class="activity-info">
-          <span>🎮 В сети: <strong>BeamNG.drive / Counter-Strike 2</strong></span>
-          <span class="activity-timer">Сессия активна: <span id="liveTimer">01:42:18</span></span>
-        </div>
-      </div>
-    </header>
+<!-- МОДУЛЬ 3: МОНИТОР BTOP / HTOP -->
+<div id="btopModule" class="term-module">
+  <div class="module-header">
+    <span>=== 📊 btop++ // Системный монитор ресурсов в реальном времени ===</span>
+    <button class="term-btn" onclick="toggleModule('btopModule')">[x] Закрыть</button>
+  </div>
+  <div class="btop-grid">
+    <div class="btop-box">
+      <div style="color:var(--yellow); font-weight:bold; margin-bottom:6px;">CPU: Intel Core i5-13400F (6P+4E / 16T)</div>
+      <div id="btopCores"></div>
+    </div>
+    <div class="btop-box">
+      <div style="color:var(--yellow); font-weight:bold; margin-bottom:6px;">GPU &amp; Memory Telemetry</div>
+      <div class="btop-bar-row"><span>RTX 4060 Ti Core</span><span id="btopGpuBar" style="color:var(--green)">[||||||..............] 32%</span></div>
+      <div class="btop-bar-row"><span>VRAM (8192 MiB)</span><span id="btopVramBar" style="color:var(--cyan)">[||||||||............] 3.4G</span></div>
+      <div class="btop-bar-row"><span>GPU Temp / Fan</span><span id="btopTemp" style="color:var(--yellow)">46°C / 1150 RPM</span></div>
+      <div class="btop-bar-row"><span>DDR5 (16384 MiB)</span><span id="btopRamBar" style="color:var(--key)">[||||||..............] 4.8G</span></div>
+      <div class="btop-bar-row"><span>NVMe (1024 GiB)</span><span style="color:var(--accent)">[||..................] 120G</span></div>
+    </div>
+  </div>
+  <table class="btop-table">
+    <thead>
+      <tr><th>PID</th><th>USER</th><th>CPU%</th><th>MEM%</th><th>COMMAND</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1042</td><td>moskvol</td><td style="color:var(--green)">8.4</td><td>14.2</td><td>/usr/bin/SteamForge --inject-daemon</td></tr>
+      <tr><td>1180</td><td>root</td><td style="color:var(--green)">1.2</td><td>2.1</td><td>/usr/bin/xray run -c /etc/archvpn/reality.json</td></tr>
+      <tr><td>1337</td><td>moskvol</td><td style="color:var(--yellow)">14.6</td><td>18.5</td><td>Hyprland --wayland-session</td></tr>
+      <tr><td>1892</td><td>moskvol</td><td style="color:var(--green)">0.8</td><td>1.4</td><td>kitty --single-instance -e fastfetch</td></tr>
+    </tbody>
+  </table>
+</div>
 
-    <section>
-      <div class="section-label">Сферы интересов</div>
-      <div class="chips-group">
-        <div class="m3-chip">
-          <div class="m3-chip-header">🐧 Linux & Custom OS</div>
-          <p>Свобода терминала, модульные оконные менеджеры, bash-скриптинг и тонкие конфиги.</p>
-        </div>
-        <div class="m3-chip">
-          <div class="m3-chip-header">🖥️ Архитектура ПК</div>
-          <p>Сборка, баланс компонентов i5 + RTX 40-й серии, разгон памяти и температурный менеджмент.</p>
-        </div>
-        <div class="m3-chip">
-          <div class="m3-chip-header">⚡ Инструменты разработки</div>
-          <p>Создание кастомных лаунчеров, автоматизация работы с файлами и манифестами Steam.</p>
-        </div>
-      </div>
-    </section>
+<!-- МОДУЛЬ 4: КРИПТО-ГЕНЕРАТОР ПАРОЛЕЙ И UUID -->
+<div id="toolsModule" class="term-module">
+  <div class="module-header">
+    <span>=== 🔐 Криптографические утилиты (Пароли &amp; UUID v4) ===</span>
+    <button class="term-btn" onclick="toggleModule('toolsModule')">[x] Закрыть</button>
+  </div>
+  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+    <span>Пароль (16 симв.):</span>
+    <code id="passOut" style="background:#11121a; padding:4px 10px; color:var(--green); border:1px solid var(--dim);">K8#mQ9$xL2!vP4@z</code>
+    <button class="term-btn" onclick="genPass()">Сгенерировать 🎲</button>
+    <button class="term-btn" onclick="copyText(document.getElementById('passOut').textContent, this)">Копировать</button>
+  </div>
+  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <span>VLESS UUID v4:</span>
+    <code id="uuidOut" style="background:#11121a; padding:4px 10px; color:var(--cyan); border:1px solid var(--dim);">a8098c1a-f86e-11da-bd1a-00112444be1e</code>
+    <button class="term-btn" onclick="genUuid()">Новый UUID 🔄</button>
+    <button class="term-btn" onclick="copyText(document.getElementById('uuidOut').textContent, this)">Копировать</button>
+  </div>
+</div>
 
-    <!-- БЛОК ХАРАКТЕРИСТИК -->
-    <section>
-      <div class="section-label" id="specHeader">Аппаратный стек (Hardware)</div>
+<!-- ВЫВОД КОМАНД ИНТЕРАКТИВНОГО ТЕРМИНАЛА -->
+<div id="shellHistory"></div>
 
-      <!-- Вариант 1: Material You -->
-      <div id="viewMaterial">
-        <div class="spec-row">
-          <span class="spec-name">⚙️ Процессор</span>
-          <span class="spec-val">Intel Core i5-13400F</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-name">🎮 Видеокарта</span>
-          <span class="spec-val">NVIDIA RTX 4060 Ti <span class="spec-tag">8 GB</span></span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-name">🧠 Оперативная память</span>
-          <span class="spec-val">16 GB <span class="spec-tag">DDR5</span></span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-name">💽 Платформа</span>
-          <span class="spec-val">Windows 11 / Linux x86_64</span>
-        </div>
+<!-- НИЖНИЙ PROMPT С МИГАЮЩИМ КУРСОРОМ -->
+<div class="prompt" style="margin-top:22px" onclick="focusShell()">
+  <div><span class="user">moskvol</span><span class="at">@</span><span class="host" id="bottomHost">arch-box</span></div>
+  <div class="live-shell-row">
+    <span class="cmd">~ $ </span>
+    <span id="typedMirror" class="cmd"></span><span class="cursor"></span>
+    <input type="text" id="cmdInput" class="shell-input" autocomplete="off" spellcheck="false">
+  </div>
+</div>
 
-        <div class="hardware-monitor">
-          <div class="gauge-box">
-            <div class="gauge-header">
-              <span>Загрузка CPU</span>
-              <span class="gauge-val" id="cpuLoadText">24%</span>
-            </div>
-            <div class="gauge-bar-bg"><div class="gauge-bar-fill" id="cpuLoadBar" style="width: 24%;"></div></div>
-          </div>
-          <div class="gauge-box">
-            <div class="gauge-header">
-              <span>Загрузка GPU</span>
-              <span class="gauge-val" id="gpuLoadText">38%</span>
-            </div>
-            <div class="gauge-bar-bg"><div class="gauge-bar-fill" id="gpuLoadBar" style="width: 38%;"></div></div>
-          </div>
-        </div>
-      </div>
+<div class="quick-cmds">
+  Быстрые команды (кликни или набери с клавиатуры): 
+  <span onclick="runCommand('help')">help</span>
+  <span onclick="runCommand('steamforge')">steamforge</span>
+  <span onclick="runCommand('vpn')">vpn</span>
+  <span onclick="runCommand('btop')">btop</span>
+  <span onclick="runCommand('ls')">ls</span>
+  <span onclick="runCommand('cat projects.txt')">cat projects.txt</span>
+  <span onclick="runCommand('pacman -Syu')">pacman -Syu</span>
+  <span onclick="runCommand('cmatrix')">cmatrix</span>
+  <span onclick="runCommand('tux')">tux</span>
+  <span onclick="runCommand('panic')">panic</span>
+  <span onclick="runCommand('clear')">clear</span>
+</div>
 
-      <!-- Вариант 2: Fastfetch Terminal -->
-      <div id="viewFastfetch">
-        <div class="fastfetch-wrapper">
-          <pre class="fastfetch-logo">
-################  ################
-################  ################
-################  ################
+<script>
+  // === 1. ЗВУКОВОЙ ДВИЖОК (AULA F75 THOCK + SYNTHWAVE PLAYER) ===
+  let audioCtx = null;
+  let soundMode = 'thock'; // 'thock' | 'beep' | 'mute'
+  let synthInterval = null;
+  let isSynthPlaying = false;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function playKeySound(freq = 900) {
+    if (!audioCtx || soundMode === 'mute') return;
+    try {
+      const now = audioCtx.currentTime;
+      if (soundMode === 'thock') {
+        // Глубокий механический "Thock" свичей Aula F75
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(42, now + 0.045);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.02, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.035);
+      }
+    } catch (e) {}
+  }
+
+  function cycleKeySound() {
+    initAudio();
+    const btn = document.getElementById('soundModeBtn');
+    if (soundMode === 'thock') {
+      soundMode = 'beep';
+      btn.textContent = '⌨️ Звук: Retro Beep';
+    } else if (soundMode === 'beep') {
+      soundMode = 'mute';
+      btn.textContent = '🔇 Звук: Выкл';
+    } else {
+      soundMode = 'thock';
+      btn.textContent = '⌨️ Звук: Aula F75 Thock';
+    }
+    playKeySound();
+  }
+
+  function toggleChiptune() {
+    initAudio();
+    const btn = document.getElementById('musicBtn');
+    if (isSynthPlaying) {
+      clearInterval(synthInterval);
+      isSynthPlaying = false;
+      btn.textContent = '🎵 Synth: OFF';
+      btn.classList.remove('active');
+    } else {
+      isSynthPlaying = true;
+      btn.textContent = '🎵 Synth: ON  Equalizer';
+      btn.classList.add('active');
+      const scale = [110, 130.81, 146.83, 164.81, 196.00, 220.00, 261.63, 293.66];
+      let step = 0;
+      synthInterval = setInterval(() => {
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        const note = scale[step % scale.length] * (step % 16 < 8 ? 1 : 1.5);
+        osc.frequency.setValueAtTime(note, now);
+        gain.gain.setValueAtTime(0.014, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.23);
+        step++;
+      }, 240);
+    }
+  }
+
+  window.addEventListener('click', initAudio, { once: true });
+  window.addEventListener('keydown', initAudio, { once: true });
+
+  // === 2. ЛОГОТИПЫ ДИСТРИБУТИВОВ ===
+  const logos = {
+    tux: {
+      color: 'var(--yellow)',
+      art: `         .--.
+        |o_o |
+        |:_/ |
+       //   \\ \\
+      (|     | )
+     /'\\_   _/\`\\
+     \\___)=(___/`
+    },
+    arch: {
+      color: 'var(--cyan)',
+      art: `        /\\
+       /  \\
+      /\\   \\
+     /      \\
+    /   ,,   \\
+   /   |  |  -\\
+  /_-''    ''-_\\`
+    },
+    cachy: {
+      color: 'var(--green)',
+      art: `     .-------------------------:
+    .+=========================.
+   :++===++==================-
+  :*++====+++++=============-
+ -*+++=====+***++==========:
+=*++++========------------:
+=*+++++=====-
+ .+*****+=-:`
+    },
+    win: {
+      color: 'var(--accent)',
+      art: `################  ################
 ################  ################
 ################  ################
 ################  ################
@@ -1033,781 +1018,535 @@
 ################  ################
 ################  ################
 ################  ################
-################  ################
-################  ################
-################  ################
-          </pre>
-          <div class="fastfetch-info">
-            <div><span class="ff-user">moskvol</span>@<span class="ff-user">custom-rig</span></div>
-            <div class="ff-sep">------------------------</div>
-            <div><span class="ff-key">OS:</span> <span class="ff-val">Windows 11 / Linux x86_64</span></div>
-            <div><span class="ff-key">Host:</span> <span class="ff-val">Desktop PC</span></div>
-            <div><span class="ff-key">Kernel:</span> <span class="ff-val">10.0.22631 / 6.10.3-arch</span></div>
-            <div><span class="ff-key">Shell:</span> <span class="ff-val">bash 5.2.26</span></div>
-            <div><span class="ff-key">CPU:</span> <span class="ff-val">Intel(R) Core(TM) i5-13400F (16) @ 4.60GHz</span></div>
-            <div><span class="ff-key">GPU:</span> <span class="ff-val">NVIDIA GeForce RTX 4060 Ti [8GB GDDR6]</span></div>
-            <div><span class="ff-key">Memory:</span> <span class="ff-val">4812MiB / 16384MiB (DDR5)</span></div>
-            <div><span class="ff-key">Disk (/):</span> <span class="ff-val">120GiB / 1024GiB (NVMe SSD)</span></div>
-          </div>
-        </div>
+################  ################`
+    }
+  };
 
-        <div class="term-input-box">
-          <span style="color: var(--primary);">$</span>
-          <input type="text" id="termCmdInput" class="term-input" placeholder="Введите help, matrix, clear или ping..." onkeydown="handleTerminalCommand(event)">
-        </div>
-        <div id="termOutput" class="term-response">Подсказка: введите 'help' для списка консольных команд.</div>
-      </div>
-    </section>
+  function setAsciiLogo(key, btn) {
+    initAudio();
+    playKeySound(1100);
+    const l = logos[key];
+    if (!l) return;
+    const pre = document.getElementById('asciiLogo');
+    pre.textContent = l.art;
+    pre.style.color = l.color;
+    document.querySelectorAll('.distro-switcher .distro-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
 
-    <!-- Витрина любимых игр -->
-    <section>
-      <div class="section-label">Витрина игр (Favorites)</div>
-      <div class="games-showcase">
-        <div class="game-card">
-          <div class="game-card-title">🚗 BeamNG.drive</div>
-          <div class="game-card-desc">Физика деформации, моды, кастомные миссии.</div>
-        </div>
-        <div class="game-card">
-          <div class="game-card-title">🧟 Dying Light</div>
-          <div class="game-card-desc">Динамичный паркур, крафт и ночной выживач.</div>
-        </div>
-        <div class="game-card">
-          <div class="game-card-title">🔧 Garry's Mod</div>
-          <div class="game-card-desc">Lua-скриптинг, аддоны, сетевой сэндбокс.</div>
-        </div>
-        <div class="game-card">
-          <div class="game-card-title">⛏️ Minecraft</div>
-          <div class="game-card-desc">Fabric, Sodium, шейдеры и сборка серверов.</div>
-        </div>
-      </div>
-    </section>
+  // === 3. ЗАГРУЗКА BIOS & LINUX LIVE TUX ===
+  let bootTimer = null;
+  let bootDone = false;
 
-    <!-- Быстрый генератор паролей -->
-    <section>
-      <div class="section-label">Безопасность (Password Generator)</div>
-      <div class="pass-generator-card">
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span style="font-size: 0.88rem; font-weight: 700; color: #fff;">Быстрый пароль:</span>
-          <span style="font-size: 0.76rem; color: var(--on-surface-variant);">Сгенерирован криптографически надёжно</span>
-        </div>
-        <div class="pass-display" id="generatedPassword">K8#mQ9$xL2!vP4</div>
-        <div style="display: flex; gap: 8px;">
-          <button class="m3-action-chip" onclick="generateNewPassword()">Сгенерировать 🎲</button>
-          <button class="m3-action-chip" style="background: var(--surface-container-high); color: var(--on-surface);" onclick="copyGeneratedPassword(this)">Копировать</button>
-        </div>
-      </div>
-    </section>
+  function updateSkipBiosLabel() {
+    const skip = localStorage.getItem('moskvol_skip_bios') === '1';
+    const el = document.getElementById('skipBiosLabel');
+    if (el) el.textContent = `Авто-пропуск BIOS: ${skip ? 'ВКЛ' : 'ВЫКЛ'}`;
+  }
 
-    <!-- Палитра тонов -->
-    <div class="palette-container">
-      <span class="palette-title">Цветовой акцент</span>
-      <div class="palette-swatches">
-        <button class="color-swatch active" style="background: #9ecaff;" data-theme="blue" title="Blue"></button>
-        <button class="color-swatch" style="background: #a8d59d;" data-theme="green" title="Green"></button>
-        <button class="color-swatch" style="background: #d4bbff;" data-theme="purple" title="Purple"></button>
-        <button class="color-swatch" style="background: #ffb4a9;" data-theme="coral" title="Coral"></button>
-        <button class="color-swatch" style="background: #80d5d0;" data-theme="teal" title="Teal"></button>
-      </div>
-    </div>
+  function toggleSkipBiosPref() {
+    const cur = localStorage.getItem('moskvol_skip_bios') === '1';
+    localStorage.setItem('moskvol_skip_bios', cur ? '0' : '1');
+    updateSkipBiosLabel();
+    playKeySound();
+  }
 
-    <!-- Проекты и контакты -->
-    <section>
-      <div class="section-label">Проекты и контакты</div>
-      <div class="links-group">
-        <button class="m3-button-card" onclick="openProjectDetails()">
-          <div class="m3-btn-inner">
-            <span>🔥 <strong>SteamForge</strong> (Steam Manifest Tool)</span>
-          </div>
-          <span class="m3-action-chip">Открыть манифест-тул →</span>
-        </button>
+  window.addEventListener('DOMContentLoaded', async () => {
+    updateSkipBiosLabel();
+    updateAcfPreview();
+    initBtopCores();
 
-        <a href="https://steamcommunity.com/id/moskvol/" target="_blank" rel="noopener noreferrer" class="m3-button-card" onclick="openExternalLink(event)">
-          <div class="m3-btn-inner">
-            <span>🎮 Steam Профиль</span>
-          </div>
-          <span class="m3-action-chip">Открыть ↗</span>
-        </a>
+    if (localStorage.getItem('moskvol_skip_bios') === '1') {
+      finishBoot('arch');
+      return;
+    }
 
-        <div class="m3-button-card">
-          <div class="m3-btn-inner">
-            <span>💬 Discord: <strong style="color: var(--primary);">moskvol1337</strong></span>
-          </div>
-          <button class="m3-action-chip" onclick="copyDiscord(this)">Копировать</button>
-        </div>
-      </div>
-    </section>
+    const logs = document.getElementById('biosLogs');
+    const lines = [
+      "MOSKVOL Modular BIOS v2.50, Tokyo Night Firmware",
+      "Motherboard: MSI B760 GAMING PLUS WIFI",
+      "CPU: Intel(R) Core(TM) i5-13400F (16 Threads) @ 4.60GHz",
+      "GPU: NVIDIA GeForce RTX 4060 Ti 8GB GDDR6",
+      "RAM: 16384MB DDR5 Dual-Channel OK",
+      "USB: Aula F75 Mechanical Keyboard + Arch Linux Live ISO Detected",
+      "Network: Arch VPN Tunnel Ready (t.me/ArchVpnChanel)",
+      "\nBooting default OS in 1.1s... (Press F11 or DEL for Boot Menu)"
+    ];
 
-    <footer>
-      <p>print("Hello MoskVol!")</p>
-    </footer>
+    for (const l of lines) {
+      if (bootDone) return;
+      const d = document.createElement('div');
+      d.textContent = l;
+      logs.appendChild(d);
+      await new Promise(r => setTimeout(r, 80));
+    }
 
-  </main>
+    playKeySound(880);
+    bootTimer = setTimeout(() => finishBoot('arch'), 1000);
+  });
 
-  <!-- 4. ОТДЕЛЬНАЯ СТРАНИЦА: STEAMFORGE DETAILS + ИНТЕРАКТИВНЫЙ ГЕНЕРАТОР -->
-  <main class="container" id="projectDetailsPage">
-    
-    <header class="profile-card">
-      <div class="profile-top-row">
-        <span class="project-hero-badge">Steam Manifest Injector & Tool</span>
-        <button class="m3-action-chip" onclick="closeProjectDetails()">← Назад в профиль</button>
-      </div>
-      <h1 class="profile-title">🔥 SteamForge</h1>
-      <p class="profile-subtitle">Утилита для генерации, редактирования и внедрения игровых манифестов в клиент Steam (аналог SteamTools).</p>
-    </header>
+  function openBootMenu() {
+    clearTimeout(bootTimer);
+    bootDone = true;
+    initAudio();
+    playKeySound(660);
+    document.getElementById('biosScreen').style.display = 'none';
+    document.getElementById('biosMenuScreen').style.display = 'flex';
+  }
 
-    <section>
-      <div class="section-label">О проекте</div>
-      <div class="project-info-card">
-        <p><strong>SteamForge</strong> — специализированный инструмент, предназначенный для сборки и прямой инъекции файлов манифестов (<code>appmanifest_*.acf</code>) и депо в директорию <code>steamapps</code>. Позволяет регистрировать и распознавать игровые файлы в официальном клиенте Steam без необходимости полной повторной загрузки из сети.</p>
-      </div>
-    </section>
+  function bootTuxLanding() {
+    initAudio();
+    playKeySound(1046);
+    document.getElementById('biosMenuScreen').style.display = 'none';
+    document.getElementById('tuxBootModal').style.display = 'flex';
+  }
 
-    <!-- Интерактивный генератор манифеста прямо в браузере -->
-    <section>
-      <div class="section-label">Интерактивный генератор AppManifest</div>
-      <div class="project-info-card">
-        <div class="forge-input-grid">
-          <div class="forge-field">
-            <label>Steam AppID:</label>
-            <input type="number" id="forgeAppId" class="forge-input" value="730" placeholder="730">
-          </div>
-          <div class="forge-field">
-            <label>Название игры (Name):</label>
-            <input type="text" id="forgeAppName" class="forge-input" value="Counter-Strike 2" placeholder="Игра">
-          </div>
-          <div class="forge-field">
-            <label>Папка установки (installdir):</label>
-            <input type="text" id="forgeInstallDir" class="forge-input" value="Counter-Strike Global Offensive" placeholder="Папка">
-          </div>
-          <div class="forge-field">
-            <label>Размер на диске (Байт):</label>
-            <input type="number" id="forgeSize" class="forge-input" value="34892819200">
-          </div>
-        </div>
+  function closeTuxLanding() {
+    initAudio();
+    playKeySound(1200);
+    document.getElementById('tuxBootModal').style.display = 'none';
+    finishBoot('tux-usb');
+  }
 
-        <div style="display: flex; gap: 8px; margin-top: 4px;">
-          <button class="m3-action-chip" onclick="generateManifestAcf()">Сгенерировать ACF ⚡</button>
-          <button class="m3-action-chip" style="background: var(--surface-container-high); color: var(--on-surface);" onclick="downloadManifestFile()">Скачать файл .acf 📥</button>
-        </div>
+  function finishBoot(mode) {
+    clearTimeout(bootTimer);
+    bootDone = true;
+    const bios = document.getElementById('biosScreen');
+    const menu = document.getElementById('biosMenuScreen');
+    bios.classList.add('fade-out');
+    menu.style.display = 'none';
+    setTimeout(() => { bios.style.display = 'none'; }, 350);
 
-        <div class="code-snippet" id="forgeOutputAcf">"AppState"
+    const osVal = document.getElementById('osVal');
+    const hosts = ['promptHost', 'infoHost', 'bottomHost'];
+
+    if (mode === 'win') {
+      setAsciiLogo('win');
+      osVal.textContent = 'Windows 11 Pro x86_64 (Dual-boot)';
+      hosts.forEach(id => document.getElementById(id).textContent = 'win11-rig');
+    } else if (mode === 'cachy') {
+      setAsciiLogo('cachy');
+      osVal.textContent = 'CachyOS Linux x86_64 (BORE Kernel)';
+      hosts.forEach(id => document.getElementById(id).textContent = 'cachy-rig');
+    } else if (mode === 'tux-usb') {
+      setAsciiLogo('tux');
+      osVal.textContent = 'Arch Linux Live USB (Tux Edition)';
+      hosts.forEach(id => document.getElementById(id).textContent = 'archiso');
+    } else {
+      setAsciiLogo('tux');
+      osVal.textContent = 'Arch Linux / CachyOS / Windows 11 x86_64';
+      hosts.forEach(id => document.getElementById(id).textContent = 'arch-box');
+    }
+  }
+
+  // === 4. STEAMFORGE STUDIO (.ACF + .LUA) ===
+  function toggleModule(id) {
+    initAudio();
+    playKeySound(1200);
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+    if (el.classList.contains('open')) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  function applyGamePreset(appid, name, dir, size, depot) {
+    initAudio();
+    playKeySound();
+    document.getElementById('acfAppId').value = appid;
+    document.getElementById('acfDepotId').value = depot;
+    document.getElementById('acfName').value = name;
+    document.getElementById('acfDir').value = dir;
+    document.getElementById('acfOutput').dataset.size = size;
+    updateAcfPreview();
+  }
+
+  function updateAcfPreview() {
+    const appid = document.getElementById('acfAppId').value || '730';
+    const depot = document.getElementById('acfDepotId').value || '731';
+    const name = document.getElementById('acfName').value || 'Game';
+    const dir = document.getElementById('acfDir').value || name;
+    const size = document.getElementById('acfOutput').dataset.size || '35840120800';
+
+    document.getElementById('acfOutput').textContent = `// appmanifest_${appid}.acf
+"AppState"
 {
-  "appid" "730"
+  "appid" "${appid}"
   "Universe" "1"
-  "name" "Counter-Strike 2"
-  "installdir" "Counter-Strike Global Offensive"
-  "StateFlags" "4"
-  "BytesToDownload" "0"
-  "BytesDownloaded" "0"
-  "AutoUpdateBehavior" "0"
-}</div>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-label">Возможности и функционал</div>
-      <div class="project-info-card">
-        <ul class="project-features-list">
-          <li>
-            <span class="item-icon">⚡</span>
-            <div class="item-content">
-              <strong>Генерация манифестов:</strong>
-              <span>Автоматическое формирование валидных файлов <code>appmanifest</code> под нужные AppID и DepotID.</span>
-            </div>
-          </li>
-          <li>
-            <span class="item-icon">📥</span>
-            <div class="item-content">
-              <strong>Внедрение в Steam:</strong>
-              <span>Быстрое добавление манифестов в библиотеки Steam в один клик без ручного редактирования ACF.</span>
-            </div>
-          </li>
-          <li>
-            <span class="item-icon">🛠️</span>
-            <div class="item-content">
-              <strong>Патчинг и верификация:</strong>
-              <span>Проверка контрольных сумм и структуры депо перед интеграцией в систему.</span>
-            </div>
-          </li>
-          <li>
-            <span class="item-icon">🔄</span>
-            <div class="item-content">
-              <strong>Работа в стиле SteamTools:</strong>
-              <span>Понятный процесс инъекции манифестов с поддержкой актуальных версий клиента.</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-label">Репозиторий на GitHub</div>
-      <div class="code-snippet">git clone https://github.com/moskvol/steamforge.git</div>
-    </section>
-
-    <section>
-      <div class="section-label">Ссылки</div>
-      <div class="links-group">
-        <a href="https://steamforge-dev.github.io/" target="_blank" rel="noopener noreferrer" class="m3-button-card" onclick="openExternalLink(event)">
-          <div class="m3-btn-inner">
-            <span>🌐 Официальный сайт SteamForge</span>
-          </div>
-          <span class="m3-action-chip">Открыть сайт ↗</span>
-        </a>
-
-        <a href="https://github.com/moskvol/steamforge" target="_blank" rel="noopener noreferrer" class="m3-button-card" onclick="openExternalLink(event)">
-          <div class="m3-btn-inner">
-            <span>🐙 Исходный код на GitHub</span>
-          </div>
-          <span class="m3-action-chip">Открыть GitHub ↗</span>
-        </a>
-      </div>
-    </section>
-
-    <footer>
-      <p>moskvol // SteamForge Project</p>
-    </footer>
-
-  </main>
-
-  <script>
-    let isBootFinished = false;
-
-    // === ПЕРЕКЛЮЧЕНИЕ СТРАНИЦЫ ПРОЕКТА STEAMFORGE ===
-    function openProjectDetails() {
-      initAudio();
-      playClickSound();
-
-      const mainContainer = document.getElementById("mainContainer");
-      const projectDetailsPage = document.getElementById("projectDetailsPage");
-
-      mainContainer.style.display = "none";
-      projectDetailsPage.style.display = "flex";
-      projectDetailsPage.classList.add("loaded");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function closeProjectDetails() {
-      initAudio();
-      playClickSound();
-
-      const mainContainer = document.getElementById("mainContainer");
-      const projectDetailsPage = document.getElementById("projectDetailsPage");
-
-      projectDetailsPage.style.display = "none";
-      mainContainer.style.display = "flex";
-      mainContainer.classList.add("loaded");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // === ПЕРЕКЛЮЧЕНИЕ ВИДОВ (MATERIAL YOU / FASTFETCH) ===
-    function switchView(mode) {
-      initAudio();
-      playClickSound();
-
-      const viewMaterial = document.getElementById("viewMaterial");
-      const viewFastfetch = document.getElementById("viewFastfetch");
-      const btnMaterial = document.getElementById("btnMaterial");
-      const btnFastfetch = document.getElementById("btnFastfetch");
-      const specHeader = document.getElementById("specHeader");
-
-      [btnMaterial, btnFastfetch].forEach(b => b.classList.remove("active"));
-
-      if (mode === "fastfetch") {
-        viewMaterial.style.display = "none";
-        viewFastfetch.style.display = "flex";
-        btnFastfetch.classList.add("active");
-        specHeader.textContent = "moskvol@system:~$ fastfetch";
-      } else {
-        viewMaterial.style.display = "flex";
-        viewFastfetch.style.display = "none";
-        btnMaterial.classList.add("active");
-        specHeader.textContent = "Аппаратный стек (Hardware)";
-      }
-
-      localStorage.setItem("moskvol_view_mode", mode);
-    }
-
-    function openExternalLink(event) {
-      initAudio();
-      playClickSound();
-    }
-
-    // === ЖИВОЙ МОНИТОРИНГ ЖЕЛЕЗА ===
-    function updateHardwareGauges() {
-      const cpu = Math.floor(18 + Math.random() * 22);
-      const gpu = Math.floor(30 + Math.random() * 25);
-      
-      const cpuBar = document.getElementById("cpuLoadBar");
-      const cpuTxt = document.getElementById("cpuLoadText");
-      const gpuBar = document.getElementById("gpuLoadBar");
-      const gpuTxt = document.getElementById("gpuLoadText");
-
-      if (cpuBar && cpuTxt) {
-        cpuBar.style.width = cpu + "%";
-        cpuTxt.textContent = cpu + "%";
-      }
-      if (gpuBar && gpuTxt) {
-        gpuBar.style.width = gpu + "%";
-        gpuTxt.textContent = gpu + "%";
-      }
-    }
-    setInterval(updateHardwareGauges, 3000);
-
-    // === ТАЙМЕР ИГРОВОЙ СЕССИИ ===
-    let sessionSeconds = 6138;
-    function updateLiveTimer() {
-      sessionSeconds++;
-      const h = String(Math.floor(sessionSeconds / 3600)).padStart(2, '0');
-      const m = String(Math.floor((sessionSeconds % 3600) / 60)).padStart(2, '0');
-      const s = String(sessionSeconds % 60).padStart(2, '0');
-      const el = document.getElementById("liveTimer");
-      if (el) el.textContent = `${h}:${m}:${s}`;
-    }
-    setInterval(updateLiveTimer, 1000);
-
-    // === БЫСТРЫЙ ГЕНЕРАТОР ПАРОЛЕЙ ===
-    function generateNewPassword() {
-      initAudio();
-      playClickSound();
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*";
-      let res = "";
-      for (let i = 0; i < 14; i++) {
-        res += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      document.getElementById("generatedPassword").textContent = res;
-    }
-
-    function copyGeneratedPassword(btn) {
-      initAudio();
-      playClickSound();
-      const pass = document.getElementById("generatedPassword").textContent;
-      navigator.clipboard.writeText(pass).then(() => {
-        const orig = btn.textContent;
-        btn.textContent = "Скопировано!";
-        setTimeout(() => btn.textContent = orig, 1800);
-      });
-    }
-
-    // === ИНТЕРАКТИВНЫЙ ГЕНЕРАТОР ACF МАНИФЕСТОВ ДЛЯ STEAMFORGE ===
-    function generateManifestAcf() {
-      initAudio();
-      playClickSound();
-      const appId = document.getElementById("forgeAppId").value || "730";
-      const appName = document.getElementById("forgeAppName").value || "Game";
-      const dir = document.getElementById("forgeInstallDir").value || appName;
-      const size = document.getElementById("forgeSize").value || "34892819200";
-
-      const acfText = `"AppState"
-{
-  "appid" "${appId}"
-  "Universe" "1"
-  "name" "${appName}"
+  "name" "${name}"
   "installdir" "${dir}"
   "StateFlags" "4"
   "SizeOnDisk" "${size}"
   "BytesToDownload" "0"
   "BytesDownloaded" "0"
-  "AutoUpdateBehavior" "0"
-  "AllowOtherDownloadsWhileRunning" "0"
-  "UserConfig"
-  {
-    "language" "russian"
-  }
 }`;
-      document.getElementById("forgeOutputAcf").textContent = acfText;
+
+    document.getElementById('luaOutput').textContent = `-- SteamForge Injector Script (${appid}.lua)
+addappid(${appid})
+addappid(${depot}, 1, "e3b0c44298fc1c149afbf4c8996fb924")
+setManifestid(${depot}, "7928491029384756102")
+-- Готово к внедрению через SteamForge`;
+  }
+
+  function downloadAcf() {
+    initAudio();
+    playKeySound();
+    const appid = document.getElementById('acfAppId').value || '730';
+    const text = document.getElementById('acfOutput').textContent;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `appmanifest_${appid}.acf`;
+    a.click();
+  }
+
+  function downloadLua() {
+    initAudio();
+    playKeySound();
+    const appid = document.getElementById('acfAppId').value || '730';
+    const text = document.getElementById('luaOutput').textContent;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `steamforge_${appid}.lua`;
+    a.click();
+  }
+
+  function copyAcf(btn) {
+    copyText(document.getElementById('acfOutput').textContent, btn);
+  }
+
+  // === 5. ARCH VPN & SPEEDTEST ===
+  let currentVpnNode = 'Нидерланды (Амстердам) — 18 ms';
+  function selectVpnNode(code, desc, btn) {
+    initAudio();
+    playKeySound();
+    currentVpnNode = desc;
+    document.querySelectorAll('#vpnModule .term-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('vpnConsoleOut').textContent = `[Arch VPN Daemon] Переключен узел: ${desc}\nПротокол: VLESS Reality | Туннель защищен.`;
+  }
+
+  async function runVpnSpeedtest() {
+    initAudio();
+    playKeySound();
+    const out = document.getElementById('vpnConsoleOut');
+    out.textContent = `[Speedtest] Подключение к серверу Arch VPN (${currentVpnNode})...\n`;
+    await new Promise(r => setTimeout(r, 350));
+    out.textContent += `[Ping] Задержка: 16.4 ms | Jitter: 0.8 ms | Потери: 0.0%\n`;
+    for (let i = 2; i <= 10; i += 2) {
+      const bars = '#'.repeat(i * 2) + '.'.repeat(20 - i * 2);
+      const dl = (780 + Math.random() * 160).toFixed(1);
+      out.textContent = `[Speedtest] Узел: ${currentVpnNode}\n[Download] [${bars}] ${dl} Mbps`;
+      playKeySound(800 + i * 50);
+      await new Promise(r => setTimeout(r, 160));
+    }
+    out.textContent += `\n[Upload]   [####################] 894.2 Mbps\n[OK] Канал Arch VPN работает на максимальной скорости! (t.me/ArchVpnChanel)`;
+  }
+
+  // === 6. BTOP++ ТЕЛЕМЕТРИЯ И ЧАСЫ ===
+  function initBtopCores() {
+    const box = document.getElementById('btopCores');
+    if (!box) return;
+    let html = '';
+    for (let i = 0; i < 8; i++) {
+      const p1 = Math.floor(8 + Math.random() * 30);
+      const p2 = Math.floor(8 + Math.random() * 30);
+      html += `<div class="btop-bar-row"><span>C${i*2} <span style="color:var(--green)">${'|'.repeat(Math.ceil(p1/6)).padEnd(8,'.')}</span> ${String(p1).padStart(2,' ')}%</span><span>C${i*2+1} <span style="color:var(--green)">${'|'.repeat(Math.ceil(p2/6)).padEnd(8,'.')}</span> ${String(p2).padStart(2,' ')}%</span></div>`;
+    }
+    box.innerHTML = html;
+  }
+
+  setInterval(() => {
+    const cpu = Math.floor(14 + Math.random() * 20);
+    const gpu = Math.floor(24 + Math.random() * 22);
+    document.getElementById('cpuStat').textContent = `[${cpu}%]`;
+    document.getElementById('gpuStat').textContent = `[${gpu}%]`;
+
+    if (document.getElementById('btopModule').classList.contains('open')) {
+      initBtopCores();
+      const gBars = '|'.repeat(Math.ceil(gpu / 5)).padEnd(20, '.');
+      document.getElementById('btopGpuBar').textContent = `[${gBars}] ${gpu}%`;
+      document.getElementById('btopTemp').textContent = `${43 + Math.floor(gpu / 8)}°C / 1180 RPM`;
     }
 
-    function downloadManifestFile() {
-      initAudio();
-      playClickSound();
-      const appId = document.getElementById("forgeAppId").value || "730";
-      const content = document.getElementById("forgeOutputAcf").textContent;
-      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `appmanifest_${appId}.acf`;
-      a.click();
-    }
+    const now = new Date();
+    document.getElementById('liveClock').textContent = now.toTimeString().split(' ')[0];
+  }, 2200);
 
-    // === ИНТЕРАКТИВНЫЙ ТЕРМИНАЛ ===
-    function handleTerminalCommand(e) {
-      if (e.key === "Enter") {
-        const input = document.getElementById("termCmdInput");
-        const out = document.getElementById("termOutput");
-        const val = input.value.trim().toLowerCase();
-        initAudio();
-        playClickSound();
+  // Смена статуса игры
+  const gamesList = [
+    'В игре: BeamNG.drive / CS2',
+    'В игре: Garry\'s Mod (Lua Sandbox)',
+    'В игре: Dying Light',
+    'В игре: Minecraft (Fabric 1.21)',
+    'Разработка: SteamForge & Arch VPN'
+  ];
+  let gameIdx = 0;
+  function cycleGamePresence() {
+    initAudio();
+    playKeySound();
+    gameIdx = (gameIdx + 1) % gamesList.length;
+    document.getElementById('presenceVal').textContent = gamesList[gameIdx];
+  }
 
-        if (val === "help") {
-          out.textContent = "Доступные команды: \n- help: справка\n- clear: очистить\n- matrix: запустить матрицу\n- ping: пинг Steam\n- whoami: информация о пользователе";
-        } else if (val === "clear") {
-          out.textContent = "";
-        } else if (val === "whoami") {
-          out.textContent = "moskvol (UID: 1000, GID: 1000) [Admin, Developer, Gamer]";
-        } else if (val === "ping") {
-          out.textContent = "64 bytes from valve.steamcommunity.com: icmp_seq=1 ttl=56 time=14.2 ms";
-        } else if (val === "matrix") {
-          out.textContent = "01001101 01001111 01010011 01010011 01010110 01001111 01001100 // System Breached!";
-        } else {
-          out.textContent = `bash: command not found: ${val}. Введите 'help'.`;
-        }
-        input.value = "";
-      }
-    }
+  // === 7. УТИЛИТЫ БЕЗОПАСНОСТИ ===
+  function genPass() {
+    initAudio();
+    playKeySound();
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#\$%&*";
+    let res = "";
+    for (let i = 0; i < 16; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+    document.getElementById('passOut').textContent = res;
+  }
 
-    // === ТЕМЫ MATERIAL YOU ===
-    const themePalettes = {
-      blue: {
-        dark: {
-          primary: "#9ecaff",
-          onPrimary: "#003258",
-          primaryContainer: "#00497d",
-          onPrimaryContainer: "#d1e4ff",
-          surface: "#111318",
-          surfaceContainerLow: "#1a1c22",
-          surfaceContainer: "#1e2027",
-          surfaceContainerHigh: "#282a31",
-          onSurface: "#e2e2e9",
-          onSurfaceVariant: "#c3c7d0",
-          outlineVariant: "#43474e"
-        },
-        light: {
-          primary: "#0061a4",
-          onPrimary: "#ffffff",
-          primaryContainer: "#d1e4ff",
-          onPrimaryContainer: "#001d36",
-          surface: "#f8f9ff",
-          surfaceContainerLow: "#f0f3fa",
-          surfaceContainer: "#eaedf4",
-          surfaceContainerHigh: "#e4e8ee",
-          onSurface: "#191c20",
-          onSurfaceVariant: "#43474e",
-          outlineVariant: "#c3c7d0"
-        }
-      },
-      green: {
-        dark: {
-          primary: "#a8d59d",
-          onPrimary: "#143813",
-          primaryContainer: "#2b5028",
-          onPrimaryContainer: "#c3f2b7",
-          surface: "#111411",
-          surfaceContainerLow: "#191d19",
-          surfaceContainer: "#1d211d",
-          surfaceContainerHigh: "#282c27",
-          onSurface: "#e1e4de",
-          onSurfaceVariant: "#c2c8bd",
-          outlineVariant: "#424940"
-        },
-        light: {
-          primary: "#42693e",
-          onPrimary: "#ffffff",
-          primaryContainer: "#c3f2b7",
-          onPrimaryContainer: "#012104",
-          surface: "#f7fbf2",
-          surfaceContainerLow: "#f1f5ec",
-          surfaceContainer: "#ebefe7",
-          surfaceContainerHigh: "#e6eae1",
-          onSurface: "#181d17",
-          onSurfaceVariant: "#424940",
-          outlineVariant: "#c2c8bd"
-        }
-      },
-      purple: {
-        dark: {
-          primary: "#d4bbff",
-          onPrimary: "#3b1a6d",
-          primaryContainer: "#533385",
-          onPrimaryContainer: "#ecd9ff",
-          surface: "#141218",
-          surfaceContainerLow: "#1d1a22",
-          surfaceContainer: "#211f26",
-          surfaceContainerHigh: "#2c2931",
-          onSurface: "#e6e0e9",
-          onSurfaceVariant: "#cac4d0",
-          outlineVariant: "#49454f"
-        },
-        light: {
-          primary: "#6b4ea2",
-          onPrimary: "#ffffff",
-          primaryContainer: "#ecd9ff",
-          onPrimaryContainer: "#260058",
-          surface: "#fef7ff",
-          surfaceContainerLow: "#f8f1fb",
-          surfaceContainer: "#f2ecf6",
-          surfaceContainerHigh: "#ece6f0",
-          onSurface: "#1d1a22",
-          onSurfaceVariant: "#49454f",
-          outlineVariant: "#cac4d0"
-        }
-      },
-      coral: {
-        dark: {
-          primary: "#ffb4a9",
-          onPrimary: "#561e17",
-          primaryContainer: "#73342b",
-          onPrimaryContainer: "#ffdad5",
-          surface: "#1a1110",
-          surfaceContainerLow: "#231918",
-          surfaceContainer: "#271d1c",
-          surfaceContainerHigh: "#332726",
-          onSurface: "#f1dedc",
-          onSurfaceVariant: "#d8c2bf",
-          outlineVariant: "#534341"
-        },
-        light: {
-          primary: "#904a42",
-          onPrimary: "#ffffff",
-          primaryContainer: "#ffdad5",
-          onPrimaryContainer: "#3b0906",
-          surface: "#fff8f7",
-          surfaceContainerLow: "#fcf1ef",
-          surfaceContainer: "#f6ebe9",
-          surfaceContainerHigh: "#f1e5e3",
-          onSurface: "#231918",
-          onSurfaceVariant: "#534341",
-          outlineVariant: "#d8c2bf"
-        }
-      },
-      teal: {
-        dark: {
-          primary: "#80d5d0",
-          onPrimary: "#003734",
-          primaryContainer: "#00504c",
-          onPrimaryContainer: "#9cf1ec",
-          surface: "#0e1514",
-          surfaceContainerLow: "#161d1c",
-          surfaceContainer: "#1a2221",
-          surfaceContainerHigh: "#242c2b",
-          onSurface: "#dee4e2",
-          onSurfaceVariant: "#bec9c7",
-          outlineVariant: "#3f4948"
-        },
-        light: {
-          primary: "#006a65",
-          onPrimary: "#ffffff",
-          primaryContainer: "#9cf1ec",
-          onPrimaryContainer: "#00201e",
-          surface: "#f4fbf9",
-          surfaceContainerLow: "#eff5f3",
-          surfaceContainer: "#e9efee",
-          surfaceContainerHigh: "#e3eae8",
-          onSurface: "#161d1c",
-          onSurfaceVariant: "#3f4948",
-          outlineVariant: "#bec9c7"
-        }
-      }
-    };
-
-    let currentColorTheme = localStorage.getItem("moskvol_m3_theme") || "blue";
-    let currentMode = localStorage.getItem("moskvol_color_mode") || "dark";
-
-    const swatches = document.querySelectorAll(".color-swatch");
-    const themeToggleBtn = document.getElementById("themeModeToggle");
-
-    function applyFullTheme() {
-      const t = themePalettes[currentColorTheme][currentMode];
-      const r = document.documentElement;
-
-      r.style.setProperty("--primary", t.primary);
-      r.style.setProperty("--on-primary", t.onPrimary);
-      r.style.setProperty("--primary-container", t.primaryContainer);
-      r.style.setProperty("--on-primary-container", t.onPrimaryContainer);
-      r.style.setProperty("--surface", t.surface);
-      r.style.setProperty("--surface-container-low", t.surfaceContainerLow);
-      r.style.setProperty("--surface-container", t.surfaceContainer);
-      r.style.setProperty("--surface-container-high", t.surfaceContainerHigh);
-      r.style.setProperty("--on-surface", t.onSurface);
-      r.style.setProperty("--on-surface-variant", t.onSurfaceVariant);
-      r.style.setProperty("--outline-variant", t.outlineVariant);
-
-      if (isBootFinished) {
-        document.body.style.backgroundColor = t.surface;
-      }
-      themeToggleBtn.textContent = currentMode === "dark" ? "🌙" : "☀️";
-
-      swatches.forEach(s => s.classList.remove("active"));
-      const activeBtn = document.querySelector(`.color-swatch[data-theme="${currentColorTheme}"]`);
-      if (activeBtn) activeBtn.classList.add("active");
-
-      localStorage.setItem("moskvol_m3_theme", currentColorTheme);
-      localStorage.setItem("moskvol_color_mode", currentMode);
-    }
-
-    function toggleLightDarkMode() {
-      initAudio();
-      playClickSound();
-      currentMode = currentMode === "dark" ? "light" : "dark";
-      applyFullTheme();
-    }
-
-    swatches.forEach(btn => {
-      btn.addEventListener("click", () => {
-        initAudio();
-        playClickSound();
-        currentColorTheme = btn.getAttribute("data-theme");
-        applyFullTheme();
-      });
+  function genUuid() {
+    initAudio();
+    playKeySound();
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
+    document.getElementById('uuidOut').textContent = uuid;
+  }
 
-    applyFullTheme();
-
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    function playPostBeep() {
-      if (!audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "square";
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.0, audioCtx.currentTime + 0.12);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(audioCtx.currentTime);
-        osc.stop(audioCtx.currentTime + 0.12);
-      } catch (e) {}
-    }
-
-    function playWindowsStartupSound() {
-      if (!audioCtx) return;
-      try {
-        const notes = [
-          { freq: 392.00, start: 0.00, dur: 1.2 },
-          { freq: 523.25, start: 0.15, dur: 1.4 },
-          { freq: 659.25, start: 0.32, dur: 1.5 },
-          { freq: 783.99, start: 0.50, dur: 2.2 }
-        ];
-
-        notes.forEach(note => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(note.freq, audioCtx.currentTime + note.start);
-          gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + note.start);
-          gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + note.start + 0.08);
-          gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + note.start + note.dur);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(audioCtx.currentTime + note.start);
-          osc.stop(audioCtx.currentTime + note.start + note.dur);
-        });
-      } catch (e) {}
-    }
-
-    function playClickSound() {
-      if (!audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-        gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.035);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(audioCtx.currentTime);
-        osc.stop(audioCtx.currentTime + 0.035);
-      } catch (e) {}
-    }
-
-    function delay(ms) {
-      return new Promise(res => setTimeout(res, ms));
-    }
-
-    window.addEventListener("click", () => initAudio(), { once: true });
-    window.addEventListener("keydown", () => initAudio(), { once: true });
-
-    // === ЦИКЛ BIOS -> WINDOWS 11 -> САЙТ ===
-    window.addEventListener("DOMContentLoaded", async () => {
-      initAudio();
-
-      const biosScreen = document.getElementById("biosScreen");
-      const biosOutput = document.getElementById("biosOutput");
-      const winBootScreen = document.getElementById("winBootScreen");
-      const mainContainer = document.getElementById("mainContainer");
-
-      function addBiosLine(text) {
-        const line = document.createElement("div");
-        line.className = "bios-line";
-        line.textContent = text;
-        biosOutput.appendChild(line);
-        return line;
-      }
-
-      await delay(250);
-      addBiosLine("MOSKVOL Modular BIOS v6.00PG, An Energy Star Ally");
-      addBiosLine("Copyright (C) 2026, MoskVol Hardware Systems Corp.\n");
-      await delay(200);
-
-      addBiosLine("CPU: Intel(R) Core(TM) i5-13400F Processor @ 4.60 GHz");
-      await delay(150);
-
-      addBiosLine("VGA BIOS: NVIDIA GeForce RTX 4060 Ti 8GB VRAM Installed");
-      await delay(150);
-
-      const memLine = addBiosLine("Memory Testing: ");
-      for (let mem = 4096; mem <= 16384; mem += 4096) {
-        memLine.textContent = `Memory Testing: ${mem}MB DDR5 OK`;
-        await delay(60);
-      }
-
-      addBiosLine("\nPrimary Master: NVMe PCI-E SSD (OS: Windows Boot Manager)");
-      addBiosLine("SMART Status: All Drives HEALTHY");
-      await delay(250);
-
-      playPostBeep();
-      addBiosLine("\nPOST Check Complete. Handing control to OS...");
-
-      const cursorLine = document.createElement("div");
-      cursorLine.innerHTML = '<span class="bios-cursor"></span>';
-      biosOutput.appendChild(cursorLine);
-
-      await delay(700);
-
-      // Переход к Windows 11
-      biosScreen.classList.add("fade-out");
-      winBootScreen.classList.add("active");
-      setTimeout(() => {
-        biosScreen.style.display = "none";
-      }, 400);
-
-      await delay(2800);
-
-      // Вход в профиль
-      playWindowsStartupSound();
-      winBootScreen.classList.add("fade-out");
-      setTimeout(() => {
-        winBootScreen.style.display = "none";
-        isBootFinished = true;
-        const savedMode = localStorage.getItem("moskvol_view_mode") || "material";
-        switchView(savedMode);
-        mainContainer.classList.add("loaded");
-      }, 600);
+  function copyText(text, btn) {
+    initAudio();
+    playKeySound();
+    navigator.clipboard.writeText(text).then(() => {
+      const old = btn.textContent;
+      btn.textContent = 'Скопировано!';
+      setTimeout(() => btn.textContent = old, 1600);
     });
+  }
 
-    function copyDiscord(button) {
-      initAudio();
-      playClickSound();
-      navigator.clipboard.writeText("moskvol1337").then(() => {
-        const originalText = button.textContent;
-        button.textContent = "Скопировано!";
-        setTimeout(() => {
-          button.textContent = originalText;
-        }, 2000);
-      });
+  function copyDiscord(btn) {
+    copyText('moskvol1337', btn);
+  }
+
+  // === 8. MATRIX FULLSCREEN EFFECT ===
+  let matrixAnim = null;
+  function startMatrix() {
+    const canvas = document.getElementById('matrixCanvas');
+    canvas.style.display = 'block';
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const cols = Math.floor(canvas.width / 16);
+    const drops = Array(cols).fill(1);
+    const chars = "MOSKVOL01STEAMFORGEARCHVPNLINUX";
+
+    matrixAnim = setInterval(() => {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.07)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#9ece6a";
+      ctx.font = "15px monospace";
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 16, drops[i] * 16);
+        if (drops[i] * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }, 40);
+  }
+
+  function stopMatrix() {
+    clearInterval(matrixAnim);
+    document.getElementById('matrixCanvas').style.display = 'none';
+  }
+
+  // === 9. ИНТЕРАКТИВНЫЙ ШЕЛЛ С ИСТОРИЕЙ И АВТОДОПОЛНЕНИЕМ ===
+  const cmdInput = document.getElementById('cmdInput');
+  const typedMirror = document.getElementById('typedMirror');
+  const shellHistory = document.getElementById('shellHistory');
+  const cmdLog = [];
+  let cmdLogIdx = -1;
+
+  const availableCmds = ['help', 'steamforge', 'vpn', 'btop', 'ls', 'cat projects.txt', 'pacman -Syu', 'cmatrix', 'tux', 'theme', 'panic', 'reboot', 'clear'];
+
+  function focusShell() {
+    cmdInput.focus();
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (!bootDone) {
+      if (e.key === 'F11' || e.key === 'Delete') {
+        e.preventDefault();
+        openBootMenu();
+      } else if (e.key === 'Escape') {
+        finishBoot('arch');
+      }
+      return;
     }
-  </script>
+
+    if (e.key === 'Escape') {
+      stopMatrix();
+      document.getElementById('panicOverlay').style.display = 'none';
+      return;
+    }
+
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName) && document.activeElement.id !== 'cmdInput') {
+      return;
+    }
+
+    cmdInput.focus();
+  });
+
+  cmdInput.addEventListener('input', () => {
+    typedMirror.textContent = cmdInput.value;
+    playKeySound();
+  });
+
+  cmdInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = cmdInput.value.trim();
+      if (val) {
+        cmdLog.push(val);
+        cmdLogIdx = cmdLog.length;
+      }
+      cmdInput.value = '';
+      typedMirror.textContent = '';
+      runCommand(val);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (cmdLogIdx > 0) {
+        cmdLogIdx--;
+        cmdInput.value = cmdLog[cmdLogIdx];
+        typedMirror.textContent = cmdInput.value;
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (cmdLogIdx < cmdLog.length - 1) {
+        cmdLogIdx++;
+        cmdInput.value = cmdLog[cmdLogIdx];
+        typedMirror.textContent = cmdInput.value;
+      } else {
+        cmdLogIdx = cmdLog.length;
+        cmdInput.value = '';
+        typedMirror.textContent = '';
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const cur = cmdInput.value.toLowerCase();
+      const match = availableCmds.find(c => c.startsWith(cur));
+      if (match) {
+        cmdInput.value = match;
+        typedMirror.textContent = match;
+      }
+    }
+  });
+
+  function runCommand(raw) {
+    initAudio();
+    playKeySound(1100);
+    const cmd = raw.toLowerCase().trim();
+    if (!cmd) return;
+
+    if (cmd === 'clear') {
+      shellHistory.innerHTML = '';
+      return;
+    }
+
+    let out = '';
+    if (cmd === 'help') {
+      out = `Команды терминала moskvol:
+  steamforge        — открыть студию манифестов SteamForge (.acf + .lua)
+  vpn               — открыть панель Arch VPN и тест скорости
+  btop              — системный монитор процессора i5-13400F и RTX 4060 Ti
+  ls                — список файлов в домашней директории ~/
+  cat projects.txt  — прочитать файл с описанием проектов
+  pacman -syu       — обновить пакеты системы Arch Linux
+  cmatrix           — запустить падающий матричный код на весь экран
+  tux               — экран посадки с пингвином Linux
+  panic             — симуляция Kernel Panic (sudo rm -rf /)
+  theme             — переключить темную / светлую тему
+  reboot            — перезагрузить в BIOS
+  clear             — очистить консоль`;
+    } else if (cmd === 'steamforge') {
+      toggleModule('steamforgeModule');
+      out = `[OK] Открыта студия SteamForge. Сайт: https://steamforge-dev.github.io/`;
+    } else if (cmd === 'vpn') {
+      toggleModule('vpnModule');
+      out = `[OK] Открыта панель Arch VPN. Канал: https://t.me/ArchVpnChanel`;
+    } else if (cmd === 'btop' || cmd === 'htop') {
+      toggleModule('btopModule');
+      out = `[OK] Запущен монитор ресурсов btop++.`;
+    } else if (cmd === 'ls') {
+      out = `drwxr-xr-x  steamforge/   archvpn/   .config/kitty/   .config/hypr/\n-rw-r--r--  projects.txt  appmanifest_730.acf  dotfiles.sh`;
+    } else if (cmd === 'cat projects.txt') {
+      out = `=== ПРОЕКТЫ MOSKVOL ===\n1. SteamForge — создание и инъекция манифестов Steam: https://steamforge-dev.github.io/\n2. Arch VPN — быстрый VLESS Reality VPN в Telegram: https://t.me/ArchVpnChanel`;
+    } else if (cmd === 'pacman -syu') {
+      out = `:: Synchronizing package databases...\n core is up to date\n extra is up to date\n multilib is up to date\n:: Starting full system upgrade...\n there is nothing to do (Arch Linux is bleeding-edge!)`;
+    } else if (cmd === 'cmatrix' || cmd === 'matrix') {
+      startMatrix();
+      out = `[OK] Запущен cmatrix (нажмите в любом месте для выхода).`;
+    } else if (cmd === 'tux') {
+      bootTuxLanding();
+      return;
+    } else if (cmd === 'panic' || cmd === 'sudo rm -rf /') {
+      document.getElementById('panicOverlay').style.display = 'flex';
+      return;
+    } else if (cmd === 'theme') {
+      toggleLightDark();
+      out = `[OK] Цветовая схема переключена.`;
+    } else if (cmd === 'reboot') {
+      localStorage.setItem('moskvol_skip_bios', '0');
+      location.reload();
+      return;
+    } else {
+      out = `zsh: command not found: ${raw} (введите 'help')`;
+    }
+
+    const block = document.createElement('div');
+    block.style.marginTop = '10px';
+    block.innerHTML = `<span class="user">moskvol</span>@<span class="host">arch-box</span> ~ $ ${raw}\n<span style="color:var(--green)">${out}</span>`;
+    shellHistory.appendChild(block);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  // === 10. ПАЛИТРА И СМЕНА ТЕМЫ ===
+  let currentTheme = 'dark';
+  function setAccent(hex) {
+    initAudio();
+    playKeySound(1400);
+    document.documentElement.style.setProperty('--accent', hex);
+    document.documentElement.style.setProperty('--key', hex);
+  }
+
+  function setThemeMode(mode) {
+    initAudio();
+    playKeySound(1200);
+    currentTheme = mode;
+    const r = document.documentElement;
+    if (mode === 'light') {
+      r.style.setProperty('--bg', '#f2f4f8');
+      r.style.setProperty('--bg-alt', '#e4e8f0');
+      r.style.setProperty('--bg-hl', '#d1d5db');
+      r.style.setProperty('--fg', '#1a1b26');
+      r.style.setProperty('--dim', '#6b7280');
+      r.style.setProperty('--accent', '#2563eb');
+      r.style.setProperty('--key', '#7c3aed');
+      r.style.setProperty('--cyan', '#0284c7');
+      r.style.setProperty('--green', '#15803d');
+      r.style.setProperty('--yellow', '#b45309');
+    } else {
+      r.style.setProperty('--bg', '#1a1b26');
+      r.style.setProperty('--bg-alt', '#16161e');
+      r.style.setProperty('--bg-hl', '#24283b');
+      r.style.setProperty('--fg', '#c0caf5');
+      r.style.setProperty('--dim', '#565f89');
+      r.style.setProperty('--accent', '#7aa2f7');
+      r.style.setProperty('--key', '#bb9af7');
+      r.style.setProperty('--cyan', '#7dcfff');
+      r.style.setProperty('--green', '#9ece6a');
+      r.style.setProperty('--yellow', '#e0af68');
+    }
+  }
+
+  function toggleLightDark() {
+    setThemeMode(currentTheme === 'dark' ? 'light' : 'dark');
+  }
+</script>
+
 </body>
 </html>
