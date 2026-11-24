@@ -18,7 +18,7 @@
 .banner:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,#091338c9,transparent 85%),repeating-linear-gradient(0deg,#ffffff07 0 1px,transparent 1px 80px);pointer-events:none}
 .hero-top,.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:3}.overline{font:700 13px NDot,Doto,monospace;letter-spacing:.06em}.hero-top span:last-child{opacity:.7}
 .hero-center{position:relative;z-index:3;max-width:60%;margin:40px 0}.hero h1{font-size:clamp(28px,4vw,55px);line-height:1.05;letter-spacing:-.065em;margin:0 0 28px}.quote{position:relative;font:700 clamp(65px,7.5vw,118px)/.92 Caveat,'Brush Script MT',cursive;letter-spacing:-.05em;margin:0;text-wrap:balance;text-shadow:0 10px 30px #10133a8c;transform:rotate(-3deg)}.quote:before{content:"“";position:absolute;top:-.37em;left:-.13em;color:var(--lime);font:700 clamp(90px,10vw,150px) Caveat,cursive}.signature{display:inline-block;font:700 clamp(36px,4.5vw,61px)/1 Caveat,cursive;color:var(--lime);transform:rotate(-4deg);margin-top:27px}
-.sculpture-shell{position:absolute;z-index:1;right:-3%;top:7%;width:57%;height:90%;pointer-events:none;filter:drop-shadow(0 24px 35px #0a104fa0)}.sculpture-shell:before{content:"";position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle at 38% 25%,#e6f5ffb0,#9daef571 27%,#6953ad47 53%,transparent 70%);filter:blur(28px)}.sculpture-shell canvas{display:block;width:100%;height:100%;position:relative}
+.sculpture-shell{position:absolute;z-index:1;right:-3%;top:7%;width:57%;height:90%;pointer-events:none;filter:drop-shadow(0 24px 35px #0a104fa0)}.sculpture-shell:before{content:"";position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle at 38% 25%,#e6f5ffb0,#9daef571 27%,#6953ad47 53%,transparent 70%);filter:blur(28px)}.sculpture-shell canvas{display:block;width:100%;height:100%;position:relative}.sculpture-fallback{position:absolute;inset:0;width:100%;height:100%;animation:float-sculpture 8s ease-in-out infinite}@keyframes float-sculpture{50%{transform:translateY(-16px) rotate(3deg)}}
 .hero-bottom{font-size:13px;font-weight:700}.hero-bottom a{border-bottom:1px solid #fff;padding-bottom:5px}.hero-bottom a:hover{color:var(--lime)}
 .about,.editorial{max-width:1450px;margin:auto;padding:clamp(110px,12vw,190px) clamp(24px,7vw,112px)}.about{display:grid;grid-template-columns:minmax(120px,.25fr) 1fr;gap:clamp(30px,5vw,90px);border-bottom:1px solid var(--line)}.eyebrow{font:700 13px NDot,Doto,monospace;color:var(--lime);letter-spacing:.06em;text-transform:uppercase}
 .about h2,.editorial h2{font-size:clamp(48px,7.5vw,112px);letter-spacing:-.085em;line-height:1.04;margin:0}.about h2 span{color:#9fbaff}.about p{font-size:clamp(18px,2vw,25px);color:var(--classic);font-family:Georgia,serif;line-height:1.55;max-width:760px;margin:35px 0 0}.about-meta{display:flex;flex-wrap:wrap;gap:20px;margin-top:42px}.about-meta span{border-top:1px solid var(--line);min-width:170px;padding-top:13px;font-size:14px;font-weight:800}.about-meta b{display:block;font:700 12px NDot,Doto,monospace;color:var(--muted);margin-bottom:5px}
@@ -39,7 +39,26 @@
 <main id="top">
 <section class="hero" aria-label="Цитата MoskVol"><div class="banner">
  <div class="hero-top"><span class="overline">MOSKVOL / ЛИЧНОЕ ПОРТФОЛИО</span><span class="overline">ИДЕИ В ДВИЖЕНИИ · 2026</span></div>
- <div class="sculpture-shell" aria-hidden="true"><canvas id="sculpture"></canvas></div>
+ <div class="sculpture-shell" aria-hidden="true">
+  <svg class="sculpture-fallback" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+   <defs>
+    <radialGradient id="sphere" cx="30%" cy="23%" r="77%"><stop stop-color="#fcffff"/><stop offset=".13" stop-color="#d4ecff"/><stop offset=".38" stop-color="#a4a5f0"/><stop offset=".7" stop-color="#6757b2"/><stop offset="1" stop-color="#1b1b5c"/></radialGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".3" stop-color="#a9d5ff"/><stop offset=".65" stop-color="#615ac4"/><stop offset="1" stop-color="#edcfff"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffffab"/><stop offset=".48" stop-color="#b8c8ff18"/><stop offset="1" stop-color="#1927838a"/></linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="30"/></filter>
+    <mask id="front"><rect width="800" height="800" fill="black"/><rect y="400" width="800" height="400" fill="white"/></mask>
+   </defs>
+   <ellipse cx="400" cy="445" rx="286" ry="276" fill="#cbb7ff" opacity=".37" filter="url(#blur)"/>
+   <g transform="rotate(-26 400 400)"><ellipse cx="400" cy="405" rx="325" ry="148" fill="none" stroke="#bfd7ff" stroke-width="45" opacity=".43"/><ellipse cx="400" cy="405" rx="325" ry="148" fill="none" stroke="url(#ring)" stroke-width="24"/></g>
+   <circle cx="400" cy="400" r="225" fill="url(#sphere)" stroke="#f3f3ffad" stroke-width="2"/>
+   <ellipse cx="348" cy="285" rx="116" ry="44" transform="rotate(-35 348 285)" fill="#fff" opacity=".23" filter="url(#blur)"/>
+   <path d="M209 371c95-152 292-178 405-37" fill="none" stroke="url(#glass)" stroke-width="68" opacity=".38"/>
+   <path d="M242 500c90 110 236 158 348 38" fill="none" stroke="#f8e7ff" stroke-width="3" opacity=".38"/>
+   <g transform="rotate(-26 400 400)" mask="url(#front)"><ellipse cx="400" cy="405" rx="325" ry="148" fill="none" stroke="url(#ring)" stroke-width="32"/><ellipse cx="400" cy="405" rx="325" ry="148" fill="none" stroke="#fff" stroke-width="4" opacity=".7"/></g>
+   <path d="M650 166l12 34 34 12-34 12-12 34-12-34-34-12 34-12z" fill="#e9f8ff"/><circle cx="170" cy="214" r="8" fill="#e7fba4"/>
+  </svg>
+  <canvas id="sculpture"></canvas>
+ </div>
  <div class="hero-center"><h1>Привет, я MoskVol.</h1><blockquote class="quote">Будущее интереснее, когда создаёшь его сам.</blockquote><span class="signature">— MoskVol</span></div>
  <div class="hero-bottom"><span>Листай вниз и знакомься со мной</span><a href="#about">Начать путешествие ↓</a></div>
 </div></section>
