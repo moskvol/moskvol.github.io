@@ -3,85 +3,127 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#171629">
-  <meta name="description" content="MoskVol — личный сайт. Нейросети, идеи и цифровые проекты.">
-  <title>MoskVol — идеи, нейросети и проекты</title>
+  <meta name="theme-color" content="#080a10">
+  <meta name="description" content="MoskVol — идеи, нейросети и проекты. Личное портфолио.">
+  <title>MoskVol — идеи в движении</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-    :root{color-scheme:dark;--bg:#171629;--surface:#26243e;--surface2:#302d4b;--text:#faf7ff;--muted:#c9c2de;--border:#e2d8ff32;--primary:#d7c6ff;--on-primary:#332153;--mint:#b5efdc;--peach:#ffd2b0;--rose:#ffc5d4;--nav:#222039e8;scroll-behavior:smooth}
-    :root[data-theme="light"]{color-scheme:light;--bg:#faf7ff;--surface:#eee9fa;--surface2:#e5def5;--text:#261c3c;--muted:#554d69;--border:#6c5b9f33;--primary:#604591;--on-primary:white;--mint:#195d51;--peach:#8e4d26;--rose:#8e4266;--nav:#f2edfaed}
-    *{box-sizing:border-box}html{scroll-padding-top:92px}body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.6 Manrope,system-ui,sans-serif;overflow-x:hidden}button,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible{outline:3px solid var(--mint);outline-offset:4px}::selection{background:var(--primary);color:var(--on-primary)}
-    .progress{position:fixed;top:0;left:0;width:var(--progress,0%);height:4px;background:linear-gradient(90deg,var(--mint),var(--primary),var(--peach));z-index:10;transition:width .1s linear}.layout{max-width:1360px;margin:auto;padding:0 clamp(20px,5vw,70px)}
-    .nav-wrap{position:sticky;top:0;z-index:9;padding:15px 0;background:linear-gradient(var(--bg),color-mix(in srgb,var(--bg) 86%,transparent));backdrop-filter:blur(18px)}.nav{display:flex;align-items:center;gap:20px;justify-content:space-between;min-height:62px;padding:9px 12px 9px 20px;border:1px solid var(--border);border-radius:100px;background:var(--nav);box-shadow:0 12px 36px #06051d26}.logo{font-weight:800;letter-spacing:-.07em;font-size:21px;white-space:nowrap}.logo span{display:inline-grid;place-items:center;width:34px;height:34px;margin-right:7px;border-radius:12px 12px 19px 12px;background:var(--primary);color:var(--on-primary);transform:rotate(-10deg)}.nav-links{display:flex;gap:4px;align-items:center}.nav-links a{padding:9px 14px;border-radius:100px;color:var(--muted);font-size:13px;font-weight:800;white-space:nowrap}.nav-links a:hover,.nav-links a.active{background:var(--surface2);color:var(--text)}.theme{width:43px;height:43px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:19px;flex:none}
-    .hero{position:relative;min-height:min(750px,calc(100svh - 93px));display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.75fr);gap:24px;align-items:center;padding-top:70px;padding-bottom:105px}.hero-copy{position:relative;z-index:2}.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--mint)}.eyebrow:before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;box-shadow:0 0 17px currentColor}.hero h1{font-size:clamp(58px,7.2vw,112px);line-height:.99;letter-spacing:-.085em;margin:20px 0 26px;font-weight:800;text-wrap:balance}.hero h1 .color{display:block;color:var(--primary)}.hero-lead{max-width:630px;color:var(--muted);font-size:clamp(17px,1.65vw,22px);line-height:1.55}.quote{display:flex;gap:14px;max-width:650px;margin:35px 0 32px;padding:18px 21px;border:1px solid var(--border);border-radius:27px 27px 45px 27px;background:var(--surface);color:var(--text)}.quote-mark{font-size:49px;line-height:.85;color:var(--peach);font-weight:800}.quote p{margin:0;font-size:17px;font-weight:700;line-height:1.5}.quote small{display:block;margin-top:8px;color:var(--muted);font-size:12px}.actions{display:flex;align-items:center;gap:11px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:12px 21px;border-radius:100px;font-weight:800;transition:transform .3s cubic-bezier(.2,1.6,.3,1),background .2s,box-shadow .2s}.button:hover{transform:translateY(-4px)}.button.primary{background:var(--primary);color:var(--on-primary);box-shadow:0 14px 33px #a887f342}.button.secondary{border:1px solid var(--border);background:var(--surface);color:var(--text)}
-    .orbit{position:relative;min-height:500px;display:grid;place-items:center;isolation:isolate}.orbit:before{content:"";position:absolute;width:min(100%,480px);aspect-ratio:1;border-radius:45% 55% 55% 45%/41% 39% 61% 59%;background:linear-gradient(145deg,#9370df,#bb94dd 49%,#f1b0a3);filter:drop-shadow(0 40px 65px #0004);transform:rotate(-15deg);animation:float 9s ease-in-out infinite}.orbit:after{content:"";position:absolute;width:73%;aspect-ratio:1;border:2px solid #fff7;border-radius:50%;transform:rotate(-30deg) scaleX(1.35);z-index:1}.orbit-core{position:relative;z-index:2;display:grid;place-items:center;width:155px;aspect-ratio:1;border-radius:42px 55px 60px 50px;background:#281d53;color:#fff;font-size:88px;font-weight:800;transform:rotate(-12deg);box-shadow:0 23px 50px #41296080;animation:float 7s ease-in-out infinite reverse}.orbit-chip{position:absolute;z-index:3;display:grid;place-items:center;width:76px;height:76px;border-radius:27px;background:#d8fad0;color:#21482e;font-size:33px;box-shadow:0 12px 25px #0004}.orbit-chip.one{top:13%;left:4%;transform:rotate(-17deg)}.orbit-chip.two{top:22%;right:1%;background:#ffdcaa;color:#614327;transform:rotate(14deg)}.orbit-chip.three{bottom:13%;left:8%;background:#d8c6ff;color:#422b75;transform:rotate(12deg)}.orbit-label{position:absolute;right:0;bottom:10%;z-index:3;padding:9px 18px;border-radius:100px;background:#241c48;color:#f8f2ff;font-size:13px;font-weight:800;transform:rotate(-7deg)}
-    .section{padding:104px 0}.section-head{max-width:780px;margin-bottom:39px}.section-index{display:block;margin-bottom:14px;color:var(--mint);font-size:12px;letter-spacing:.15em;font-weight:800;text-transform:uppercase}.section h2{margin:0 0 16px;font-size:clamp(39px,5vw,72px);line-height:1.07;letter-spacing:-.075em;text-wrap:balance}.section-desc{font-size:clamp(16px,1.5vw,19px);color:var(--muted);margin:0;max-width:740px}.about-grid{display:grid;grid-template-columns:1.3fr repeat(2,minmax(0,.8fr));gap:15px}.about-card{min-height:240px;padding:28px;border:1px solid var(--border);border-radius:34px 34px 52px 34px;background:var(--surface);display:flex;flex-direction:column;justify-content:space-between}.about-card:nth-child(2){background:#3b315b;color:#fff}.about-card:nth-child(3){background:#31554f;color:#fff}.about-card .big{font-size:clamp(50px,6vw,92px);line-height:1;letter-spacing:-.09em;font-weight:800}.about-card .icon{font-size:36px}.about-card h3{font-size:19px;line-height:1.25;margin:0 0 6px}.about-card p{margin:0;color:inherit;opacity:.85;font-size:14px}.about-card.intro{background:linear-gradient(140deg,#423369,#25243b);color:white}.about-card.intro h3{font-size:28px;letter-spacing:-.04em}.about-card.intro p{font-size:16px;line-height:1.6}
-    .friends{position:relative}.friends:before{content:"";position:absolute;inset:8% -20% 0;background:radial-gradient(ellipse at 60% 40%,#563d7942,transparent 55%);pointer-events:none}.friends-grid{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.friend-card{position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:410px;padding:29px;border:1px solid var(--border);background:var(--surface);border-radius:36px 36px 72px 36px;transition:transform .35s cubic-bezier(.2,1.4,.3,1),box-shadow .35s}.friend-card:hover{transform:translateY(-9px) rotate(-1deg);box-shadow:0 23px 50px #0003}.friend-card:nth-child(2){border-radius:36px 72px 36px 36px}.friend-card:nth-child(3){border-radius:72px 36px 36px 36px}.friend-card:after{content:"";position:absolute;right:-65px;top:-70px;width:220px;height:220px;border-radius:46% 54% 42% 58%;background:var(--glow);opacity:.27;filter:blur(3px)}.friend-icon{display:grid;place-items:center;width:92px;height:92px;border-radius:32px;background:var(--glow);color:#221b35;font-size:45px;font-weight:800;position:relative;z-index:1;transform:rotate(-8deg)}.friend-card h3{font-size:clamp(30px,3vw,42px);letter-spacing:-.06em;line-height:1;margin:38px 0 13px}.friend-card p{color:var(--muted);font-size:16px;margin:0;max-width:320px}.friend-card .tag{margin-top:auto;padding-top:25px;color:var(--text);font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}.friend-card.gemini{--glow:#c3b9ff}.friend-card.chatgpt{--glow:#a7e9d3}.friend-card.claude{--glow:#ffc8b0}
-    .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.project{display:flex;flex-direction:column;min-height:265px;padding:26px;border:1px solid var(--border);border-radius:33px;background:var(--surface);transition:transform .25s,background .25s}.project:hover{transform:translateY(-5px);background:var(--surface2)}.project .emoji{font-size:38px}.project h3{font-size:24px;letter-spacing:-.05em;margin:20px 0 7px}.project p{color:var(--muted);margin:0}.project .more{margin-top:auto;color:var(--primary);font-weight:800;padding-top:20px}.project:nth-child(2){border-radius:52px 33px 33px 33px}
-    .closing{border-radius:55px 55px 120px 55px;background:linear-gradient(120deg,#644b9e,#9871bf 60%,#d998a5);color:white;padding:clamp(35px,6vw,70px);margin:40px 0 70px;position:relative;overflow:hidden}.closing:after{content:"✳";position:absolute;right:5%;top:-24%;font-size:270px;opacity:.16;transform:rotate(17deg);pointer-events:none}.closing h2{font-size:clamp(42px,5.5vw,75px);line-height:1.05;letter-spacing:-.07em;margin:0 0 13px;position:relative;z-index:1}.closing p{position:relative;z-index:1;font-size:18px;max-width:600px}.closing .button{position:relative;z-index:1;background:white;color:#42296e}.footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:0 0 42px;color:var(--muted);font-size:13px}.footer a{text-decoration:underline;text-underline-offset:3px}
-    .reveal{opacity:0;transform:translateY(34px);transition:opacity .65s,transform .65s cubic-bezier(.2,.85,.25,1)}.reveal.visible{opacity:1;transform:none}.friends-grid .reveal:nth-child(2){transition-delay:.12s}.friends-grid .reveal:nth-child(3){transition-delay:.24s}@keyframes float{50%{transform:translateY(-19px) rotate(-5deg)}}
-    @media(max-width:1050px){.hero{grid-template-columns:minmax(0,1fr) minmax(230px,.55fr)}.orbit{min-height:400px}.orbit-core{width:120px;font-size:65px}.orbit-chip{width:61px;height:61px;font-size:28px}.about-grid{grid-template-columns:repeat(2,1fr)}.about-card.intro{grid-column:span 2}.friends-grid,.project-grid{gap:10px}.friend-card{padding:20px;min-height:360px}}
-    @media(max-width:750px){.nav-links{display:none}.hero{padding-top:50px;grid-template-columns:1fr;padding-bottom:30px}.hero h1{font-size:clamp(58px,12vw,78px)}.orbit{min-height:330px;max-width:480px;width:100%;margin:0 auto}.orbit:before{width:320px}.section{padding:70px 0}.friends-grid,.project-grid{grid-template-columns:1fr}.friend-card{min-height:270px}.friend-card h3{margin-top:25px}.friend-card:nth-child(n){border-radius:34px 34px 56px 34px}.about-grid{grid-template-columns:1fr 1fr}.about-card{min-height:200px;padding:21px}}
-    @media(max-width:480px){.nav-wrap{padding:9px 0}.layout{padding-inline:17px}.hero h1{font-size:clamp(52px,13.5vw,68px)}.hero-lead{font-size:16px}.quote{margin-top:25px}.quote p{font-size:15px}.orbit{min-height:290px}.orbit:before{width:275px}.orbit-core{width:98px;font-size:53px}.orbit-chip.two{right:7%}.orbit-label{right:3%;bottom:5%}.about-grid{gap:9px}.about-card{min-height:190px;padding:18px}.about-card.intro{min-height:235px}.about-card .big{font-size:54px}.about-card h3{font-size:15px}.section h2{font-size:41px}.closing{border-radius:37px 37px 80px 37px;padding:32px;margin-bottom:48px}}
-    @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+    :root{color-scheme:dark;--bg:#080a10;--ink:#f6f3ef;--muted:#a5a9b5;--line:#ffffff2a;--blue:#9fbdff;--lime:#d9fc8e}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:75px}
+    body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.6 Manrope,system-ui,sans-serif;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}button,a{font:inherit}a:focus-visible,button:focus-visible{outline:2px solid var(--lime);outline-offset:5px}
+    ::selection{background:var(--lime);color:#101515}
+    .progress{position:fixed;inset:0 auto auto 0;height:3px;width:0;background:var(--lime);z-index:30;pointer-events:none}
+    .nav{position:fixed;z-index:20;top:0;left:0;width:100%;height:74px;padding:0 clamp(22px,5vw,90px);display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #ffffff19;background:#080a10bc;backdrop-filter:blur(18px)}
+    .brand{font-size:20px;font-weight:800;letter-spacing:-.07em;white-space:nowrap}.brand b{color:var(--lime)}
+    .nav-links{display:flex;align-items:center;gap:clamp(16px,3vw,42px);font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}.nav-links a{color:#d7d9df}.nav-links a:hover{color:var(--lime)}
+    .nav-terminal{padding:9px 15px;border:1px solid #ffffff66;border-radius:4px;white-space:nowrap}
+    .hero{padding:95px clamp(15px,3vw,44px) 25px;min-height:100svh;display:grid}
+    .banner{position:relative;isolation:isolate;min-height:calc(100svh - 120px);overflow:hidden;border:1px solid #8c95c64a;border-radius:clamp(12px,2.2vw,30px);background:radial-gradient(ellipse 55% 85% at 80% 55%,#aebfff 0%,#696de8 24%,transparent 63%),radial-gradient(ellipse 80% 100% at 110% 120%,#bb6cceaa 0%,transparent 60%),radial-gradient(ellipse 60% 90% at 0% 0%,#28468e 0%,transparent 80%),#141c3a;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(25px,5vw,80px)}
+    .banner:before{content:"";position:absolute;z-index:-1;width:min(75vw,940px);aspect-ratio:1;right:-15%;top:-20%;border:1px solid #ffffff7d;border-radius:50%;box-shadow:0 0 0 110px #ffffff0b,0 0 0 220px #ffffff07;transform:rotate(-17deg)}
+    .banner:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,#0d193ec9,transparent 85%),repeating-linear-gradient(0deg,#ffffff09 0 1px,transparent 1px 80px);mask-image:linear-gradient(90deg,#000,transparent 85%)}
+    .hero-top,.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:18px}.overline{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:800}.hero-top span:last-child{opacity:.72}.hero-center{max-width:1050px;margin:45px 0;position:relative}
+    .banner h1{font-size:clamp(30px,5vw,77px);line-height:1.05;letter-spacing:-.075em;margin:0 0 15px;font-weight:800}
+    .quote{position:relative;font:700 clamp(60px,9vw,153px)/.93 Caveat,'Brush Script MT',cursive;letter-spacing:-.055em;margin:0;max-width:1050px;text-wrap:balance;text-shadow:0 10px 35px #0d0c4b50;transform:rotate(-3deg)}
+    .quote:before{content:"“";position:absolute;top:-.38em;left:-.16em;color:#e3fca6;font:700 clamp(85px,11vw,170px) Caveat,cursive}
+    .signature{font:700 clamp(35px,5vw,65px)/1 Caveat,cursive;color:#e5fba4;transform:rotate(-4deg);display:inline-block;margin-top:34px}
+    .hero-bottom{font-size:13px;font-weight:700}.hero-bottom a{display:inline-flex;align-items:center;gap:15px;padding-bottom:5px;border-bottom:1px solid #fff;transition:gap .25s}.hero-bottom a:hover{gap:24px}.hero-bottom .arrow{font-size:21px}
+    .about{max-width:1400px;margin:auto;padding:clamp(100px,13vw,205px) clamp(25px,7vw,110px);display:grid;grid-template-columns:minmax(130px,.3fr) minmax(0,1fr);gap:clamp(30px,6vw,100px);border-bottom:1px solid var(--line)}
+    .section-num{color:var(--lime);font-size:12px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;padding-top:17px}
+    .about h2{font-size:clamp(47px,7vw,103px);letter-spacing:-.08em;line-height:1.07;margin:0;max-width:1080px}.about h2 span{color:var(--blue)}
+    .about p{font-size:clamp(18px,2.1vw,26px);color:var(--muted);line-height:1.5;max-width:760px;margin:35px 0 0}
+    .about-meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:42px}.about-meta span{border-top:1px solid var(--line);min-width:180px;padding-top:13px;font-weight:800;font-size:14px}.about-meta b{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+    .stage{position:relative;border-bottom:1px solid var(--line)}
+    .pin{min-height:100svh;padding:110px clamp(22px,5vw,80px) 45px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+    .stage-head{text-align:center;z-index:5;margin-bottom:24px}.stage-head .section-num{padding:0}.stage-head h2{font-size:clamp(44px,6vw,86px);letter-spacing:-.08em;line-height:1.02;margin:14px 0 9px}.stage-head p{color:var(--muted);margin:0;font-size:clamp(14px,1.5vw,18px)}
+    .deck{width:min(100%,1080px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;perspective:1300px}
+    .stage-card{min-height:420px;border-radius:20px;padding:clamp(25px,3vw,48px);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;backface-visibility:hidden;transform-style:preserve-3d;border:1px solid #ffffff55;box-shadow:0 30px 70px #0006}
+    .stage-card:before{content:"";position:absolute;right:-15%;top:-42%;width:75%;aspect-ratio:1;border:1px solid #ffffff8a;border-radius:50%;box-shadow:0 0 0 54px #ffffff14,0 0 0 108px #ffffff10;transform:rotate(-24deg);pointer-events:none}
+    .gemini{background:linear-gradient(142deg,#273e82 0%,#6958b4 54%,#b982b2);color:#fff}.chatgpt{background:linear-gradient(145deg,#0d3e3c,#267b70 60%,#9bd5ad);color:#fff}.claude{background:linear-gradient(145deg,#5d302c,#bd694d 60%,#f5ae80);color:#fff}
+    .project-quiz{background:linear-gradient(140deg,#35205c,#7052b7 65%,#aa81db)}.project-steam{background:linear-gradient(145deg,#172b4f,#30698e 65%,#86adc9)}.project-term{background:linear-gradient(145deg,#0a2026,#155a61 65%,#61b99a)}
+    .card-top{display:flex;align-items:center;justify-content:space-between;gap:15px;position:relative;z-index:1}.card-index{font:700 13px Manrope,sans-serif;letter-spacing:.15em}.glyph{font-size:75px;line-height:1;filter:drop-shadow(0 12px 25px #0004);transform:rotate(-12deg)}
+    .stage-card h3{font-size:clamp(38px,5.5vw,72px);line-height:1;letter-spacing:-.075em;margin:0 0 16px}.stage-card p{font-size:clamp(15px,1.6vw,19px);line-height:1.45;max-width:480px;margin:0;opacity:.9}.stage-card small{display:block;font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;margin-top:28px;opacity:.8}
+    .stage-card .card-bottom{position:relative;z-index:1}.project-card{color:#fff;text-decoration:none}.project-card .visit{display:inline-flex;align-items:center;gap:12px;margin-top:24px;border-bottom:1px solid #fffd;padding-bottom:4px;font-weight:800;font-size:14px}
+    .stage-foot{z-index:5;width:min(100%,1080px);display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:22px;color:var(--muted);font-size:13px;font-weight:800}.dots{display:flex;gap:7px}.dots i{width:22px;height:4px;background:#ffffff49;border-radius:10px;transition:background .25s,width .25s}.dots i.active{background:var(--lime);width:44px}
+    .motion .stage{height:330svh}.motion .pin{position:sticky;top:0;height:100svh;min-height:0}.motion .deck{position:relative;width:min(100%,850px);height:min(54svh,480px);display:block;perspective:1500px}.motion .stage-card{position:absolute;inset:0;min-height:0;will-change:transform,opacity;transition:opacity .12s;box-shadow:0 32px 80px #000a}.motion .stage-card:focus-visible{z-index:8}
+    .outro{min-height:82svh;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(65px,8vw,120px) clamp(25px,7vw,110px) 30px;background:radial-gradient(ellipse 50% 80% at 75% 40%,#2a37768a,transparent 70%),#0d1121}
+    .outro h2{font-size:clamp(70px,11vw,168px);line-height:.9;letter-spacing:-.095em;margin:25px 0}.outro h2 em{font:700 1.12em/.8 Caveat,cursive;color:var(--lime);font-style:normal;letter-spacing:-.06em}.outro p{color:var(--muted);font-size:19px;max-width:550px}.outro .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:35px}.outro .links a{border:1px solid #fff8;padding:14px 20px;border-radius:3px;font-size:13px;font-weight:800}.outro .links a:hover{background:#fff;color:#111}
+    footer{border-top:1px solid var(--line);padding-top:25px;margin-top:80px;display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--muted)}
+    @media(max-width:850px){.nav-links a:not(.nav-terminal){display:none}.about{grid-template-columns:1fr;gap:25px}.about .section-num{padding:0}.stage-card{min-height:330px}.deck{grid-template-columns:1fr}.motion .deck{width:min(100%,620px);height:min(56svh,510px)}.motion .stage-card{min-height:0}.pin{padding-inline:20px}.stage-head{margin-bottom:18px}}
+    @media(max-width:550px){.nav{height:64px;padding-inline:17px}.nav-terminal{padding:7px 10px;font-size:11px}.hero{padding:74px 9px 9px}.banner{min-height:calc(100svh - 83px);padding:29px 25px}.banner:before{width:110vw;right:-60%;top:20%}.banner:after{background:linear-gradient(90deg,#101c41a6,transparent)}.hero-top span:last-child{display:none}.hero-center{margin:25px 0}.banner h1{font-size:34px}.quote{font-size:clamp(57px,16vw,90px);line-height:.94}.signature{font-size:48px}.hero-bottom{font-size:11px}.about{padding:105px 24px}.about-meta span{min-width:120px}.pin{padding:83px 14px 35px}.stage-head h2{font-size:44px}.stage-head p{font-size:13px}.motion .deck{height:min(53svh,500px)}.stage-card{padding:28px;min-height:340px}.stage-card h3{font-size:48px}.stage-card p{font-size:15px}.glyph{font-size:60px}.stage-foot{font-size:11px}.outro{padding-inline:23px}.outro h2{font-size:75px}footer{flex-direction:column;margin-top:80px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
   </style>
 </head>
 <body>
   <div class="progress" id="progress" aria-hidden="true"></div>
-  <div class="nav-wrap"><div class="layout"><nav class="nav" aria-label="Основная навигация">
-    <a class="logo" href="#top" aria-label="MoskVol — наверх"><span aria-hidden="true">✦</span> MoskVol</a>
-    <div class="nav-links"><a href="#about">Обо мне</a><a href="#friends">Друзья-нейросети</a><a href="#projects">Проекты</a></div>
-    <button class="theme" id="theme" type="button" aria-label="Переключить тему" title="Переключить тему">☼</button>
-  </nav></div></div>
+  <nav class="nav" aria-label="Навигация"><a class="brand" href="#top">MoskVol<b>.</b></a><div class="nav-links"><a href="#about">Обо мне</a><a href="#friends">Нейросети</a><a href="#projects">Проекты</a><a class="nav-terminal" href="terminal.html">⌘ Терминал ↗</a></div></nav>
   <main id="top">
-    <div class="layout">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <span class="eyebrow">Привет из моего цифрового мира</span>
-          <h1 id="hero-title">Я — <span class="color">MoskVol.</span></h1>
-          <p class="hero-lead">Мне нравится изучать нейросети, придумывать идеи и превращать их в настоящие проекты.</p>
-          <div class="quote"><span class="quote-mark" aria-hidden="true">“</span><div><p>Будущее интереснее, когда создаёшь его сам.</p><small>— MoskVol</small></div></div>
-          <div class="actions"><a class="button primary" href="#about">Познакомиться ↘</a><a class="button secondary" href="#friends">Мои друзья-нейросети</a><a class="button secondary" href="terminal.html">⌨ Перейти в терминал ↗</a></div>
+    <section class="hero" aria-label="Цитата MoskVol">
+      <div class="banner">
+        <div class="hero-top"><span class="overline">MoskVol / Личное портфолио</span><span class="overline">Идеи в движении · 2026</span></div>
+        <div class="hero-center"><h1>Привет, я MoskVol.</h1><blockquote class="quote">Будущее интереснее, когда создаёшь его сам.</blockquote><span class="signature">— MoskVol</span></div>
+        <div class="hero-bottom"><span>Листай вниз и знакомься со мной</span><a href="#about">Начать путешествие <span class="arrow" aria-hidden="true">↓</span></a></div>
+      </div>
+    </section>
+    <section class="about" id="about"><div class="section-num">01 / Обо мне</div><div><h2>Учусь.<br>Пробую.<br><span>Создаю.</span></h2><p>Мне 12 лет, я живу в Домодедово. Люблю нейросети, новые технологии и превращать идеи в настоящие цифровые проекты.</p><div class="about-meta"><span><b>Ник</b>MoskVol</span><span><b>Город</b>Домодедово</span><span><b>Интерес</b>Нейросети и код</span></div></div></section>
+    <section class="stage" id="friends" data-stage>
+      <div class="pin"><div class="stage-head"><div class="section-num">02 / Мои друзья — нейросети</div><h2>Три взгляда на идеи.</h2><p>Листай дальше — они сменяют друг друга.</p></div>
+        <div class="deck">
+          <article class="stage-card gemini"><div class="card-top"><span class="card-index">01 / GEMINI</span><span class="glyph" aria-hidden="true">✧</span></div><div class="card-bottom"><h3>Gemini.</h3><p>Помогает смотреть на идею под новым углом и смелее экспериментировать.</p><small>Идеи / Любопытство / Поиск</small></div></article>
+          <article class="stage-card chatgpt"><div class="card-top"><span class="card-index">02 / CHATGPT</span><span class="glyph" aria-hidden="true">✳</span></div><div class="card-bottom"><h3>ChatGPT.</h3><p>С ним можно разбирать сложные темы, обсуждать задумки и писать код.</p><small>Диалог / Учёба / Разработка</small></div></article>
+          <article class="stage-card claude"><div class="card-top"><span class="card-index">03 / CLAUDE</span><span class="glyph" aria-hidden="true">✦</span></div><div class="card-bottom"><h3>Claude.</h3><p>Помогает спокойно обдумать большую задачу и найти ясное решение.</p><small>Тексты / Анализ / Внимание</small></div></article>
         </div>
-        <div class="orbit" aria-hidden="true"><div class="orbit-chip one">✦</div><div class="orbit-chip two">✳</div><div class="orbit-chip three">◆</div><div class="orbit-core">M</div><div class="orbit-label">IDEAS IN MOTION ✦</div></div>
-      </section>
-      <section class="section" id="about" aria-labelledby="about-title">
-        <div class="section-head reveal"><span class="section-index">01 / Немного обо мне</span><h2 id="about-title">Привет! Давай знакомиться.</h2><p class="section-desc">Я MoskVol. Люблю исследовать новые технологии и пробовать то, что вчера казалось невозможным.</p></div>
-        <div class="about-grid">
-          <article class="about-card intro reveal"><span class="icon" aria-hidden="true">👋</span><div><h3>Мой маленький мир идей</h3><p>Мне 12 лет, я живу в Домодедово. Больше всего люблю нейросети: с ними интересно учиться, экспериментировать и создавать что-то своё.</p></div></article>
-          <article class="about-card reveal"><span class="big">12</span><div><h3>лет</h3><p>И впереди ещё много открытий.</p></div></article>
-          <article class="about-card reveal"><span class="icon" aria-hidden="true">📍</span><div><h3>Домодедово</h3><p>Город, из которого начинаются мои идеи.</p></div></article>
+        <div class="stage-foot"><span data-counter>01 / 03 · Gemini</span><span class="dots" aria-hidden="true"><i class="active"></i><i></i><i></i></span><span>ПРОКРУТКА ↓</span></div>
+      </div>
+    </section>
+    <section class="stage" id="projects" data-stage>
+      <div class="pin"><div class="stage-head"><div class="section-num">03 / Проекты</div><h2>Сделано из идей.</h2><p>Каждый проект — новый эксперимент.</p></div>
+        <div class="deck">
+          <a class="stage-card project-card project-quiz" href="https://www.moskvol.space/quiz/"><div class="card-top"><span class="card-index">01 / ИГРА</span><span class="glyph" aria-hidden="true">◈</span></div><div class="card-bottom"><h3>Quiz Battle.</h3><p>Викторина для друзей: выбираем тему, отвечаем на вопросы и соревнуемся вместе.</p><span class="visit">Открыть проект ↗</span></div></a>
+          <a class="stage-card project-card project-steam" href="https://steamforge-dev.github.io/"><div class="card-top"><span class="card-index">02 / ЭКСПЕРИМЕНТ</span><span class="glyph" aria-hidden="true">⚙</span></div><div class="card-bottom"><h3>SteamForge.</h3><p>Мой эксперимент с инструментами и игровыми проектами.</p><span class="visit">Открыть проект ↗</span></div></a>
+          <a class="stage-card project-card project-term" href="terminal.html"><div class="card-top"><span class="card-index">03 / ИНТЕРАКТИВ</span><span class="glyph" aria-hidden="true">⌘</span></div><div class="card-bottom"><h3>Arch Terminal.</h3><p>Виртуальный терминал с командами, папками и спрятанными сюрпризами.</p><span class="visit">Перейти в терминал ↗</span></div></a>
         </div>
-      </section>
-      <section class="section friends" id="friends" aria-labelledby="friends-title">
-        <div class="section-head reveal"><span class="section-index">02 / Моя команда идей</span><h2 id="friends-title">Мои друзья —<br>нейросети.</h2><p class="section-desc">Мне нравится узнавать, как по-разному они помогают думать, учиться и создавать новое.</p></div>
-        <div class="friends-grid">
-          <article class="friend-card gemini reveal"><div class="friend-icon" aria-hidden="true">✧</div><h3>Gemini</h3><p>Помогает взглянуть на идею с разных сторон и вдохновляет пробовать новое.</p><span class="tag">Идеи · Любопытство · Эксперименты</span></article>
-          <article class="friend-card chatgpt reveal"><div class="friend-icon" aria-hidden="true">✳</div><h3>ChatGPT</h3><p>С ним можно обсуждать задумки, разбирать сложные темы и писать код.</p><span class="tag">Диалог · Учёба · Разработка</span></article>
-          <article class="friend-card claude reveal"><div class="friend-icon" aria-hidden="true">✦</div><h3>Claude</h3><p>Помогает спокойно обдумывать большие задачи и находить ясные решения.</p><span class="tag">Тексты · Анализ · Внимание</span></article>
-        </div>
-      </section>
-      <section class="section" id="projects" aria-labelledby="projects-title">
-        <div class="section-head reveal"><span class="section-index">03 / То, что я создаю</span><h2 id="projects-title">Идеи превращаются<br>в проекты.</h2><p class="section-desc">Люблю, когда можно открыть сайт и увидеть результат своей работы.</p></div>
-        <div class="project-grid">
-          <a class="project reveal" href="https://www.moskvol.space/quiz/"><span class="emoji" aria-hidden="true">🎮</span><h3>Quiz Battle</h3><p>Викторина для друзей: выбираем темы, отвечаем на вопросы и играем вместе.</p><span class="more">Открыть проект ↗</span></a>
-          <a class="project reveal" href="https://steamforge-dev.github.io/"><span class="emoji" aria-hidden="true">⚙️</span><h3>SteamForge</h3><p>Один из моих экспериментов с инструментами и игровыми проектами.</p><span class="more">Открыть проект ↗</span></a>
-          <a class="project reveal" href="terminal.html"><span class="emoji" aria-hidden="true">⌨️</span><h3>Arch Linux Terminal</h3><p>Виртуальная командная строка: папки, команды и пасхалки.</p><span class="more">Перейти в терминал ↗</span></a>
-        </div>
-      </section>
-      <section class="closing reveal" aria-labelledby="closing-title"><h2 id="closing-title">Увидимся<br>в будущем.</h2><p>А пока я продолжаю учиться, экспериментировать и собирать свои идеи по кусочкам.</p><a class="button" href="#top">Наверх ↑</a></section>
-      <footer class="footer"><span>© <span id="year"></span> MoskVol · Сделано с любопытством ✦</span><a href="https://github.com/moskvol">Мой GitHub ↗</a></footer>
-    </div>
+        <div class="stage-foot"><span data-counter>01 / 03 · Quiz Battle</span><span class="dots" aria-hidden="true"><i class="active"></i><i></i><i></i></span><span>ПРОКРУТКА ↓</span></div>
+      </div>
+    </section>
+    <section class="outro"><div><div class="section-num">04 / Продолжение следует</div><h2>Идеи только<br><em>начинаются.</em></h2><p>Я продолжаю учиться и делать новые штуки. Заглядывай ещё.</p><div class="links"><a href="terminal.html">⌘ Перейти в терминал ↗</a><a href="https://github.com/moskvol">Мой GitHub ↗</a><a href="#top">Наверх ↑</a></div></div><footer><span>© <span id="year"></span> MoskVol</span><span>Сделано с любопытством ✦</span></footer></section>
   </main>
   <script>
-    const root=document.documentElement,themeButton=document.getElementById('theme');
-    const saved=localStorage.getItem('moskvol-theme');if(saved==='light'||saved==='dark')root.dataset.theme=saved;
-    function updateTheme(){themeButton.textContent=root.dataset.theme==='light'?'☾':'☼';themeButton.setAttribute('aria-label',root.dataset.theme==='light'?'Включить тёмную тему':'Включить светлую тему')}
-    updateTheme();themeButton.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='light'?'dark':'light';localStorage.setItem('moskvol-theme',root.dataset.theme);updateTheme()});
     document.getElementById('year').textContent=new Date().getFullYear();
-    const reveals=document.querySelectorAll('.reveal');if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})},{threshold:.12});reveals.forEach(el=>observer.observe(el))}else reveals.forEach(el=>el.classList.add('visible'));
-    const navLinks=[...document.querySelectorAll('.nav-links a')];if('IntersectionObserver'in window){const active=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-30% 0px -55% 0px'});document.querySelectorAll('main section[id]').forEach(el=>active.observe(el))}
-    let scheduled=false;function updateProgress(){const distance=document.documentElement.scrollHeight-innerHeight;document.getElementById('progress').style.setProperty('--progress',(distance>0?Math.min(100,Math.max(0,scrollY/distance*100)):0)+'%');scheduled=false}addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(updateProgress)}},{passive:true});updateProgress();
+    const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    const stages=[...document.querySelectorAll('[data-stage]')].map(el=>({el,cards:[...el.querySelectorAll('.stage-card')],dots:[...el.querySelectorAll('.dots i')],counter:el.querySelector('[data-counter]')}));
+    const labels=[['Gemini','ChatGPT','Claude'],['Quiz Battle','SteamForge','Arch Terminal']];
+    let ticking=false;
+    function update(){
+      ticking=false;
+      const range=document.documentElement.scrollHeight-innerHeight;
+      document.getElementById('progress').style.width=(range>0?Math.max(0,Math.min(100,scrollY/range*100)):0)+'%';
+      if(reduced.matches)return;
+      stages.forEach(({el,cards,dots,counter},section)=>{
+        const rect=el.getBoundingClientRect(),travel=Math.max(1,el.offsetHeight-innerHeight);
+        const progress=Math.max(0,Math.min(1,-rect.top/travel)),position=progress*(cards.length-1),active=Math.round(position);
+        const width=Math.min(innerWidth*.6,470);
+        cards.forEach((card,index)=>{
+          const delta=index-position,abs=Math.abs(delta);
+          const x=delta*width,y=abs*25,z=-abs*210,ry=-delta*25,rz=delta*5,scale=Math.max(.67,1-abs*.22);
+          card.style.transform='translate3d('+x+'px,'+y+'px,'+z+'px) rotateY('+ry+'deg) rotateZ('+rz+'deg) scale('+scale+')';
+          card.style.opacity=String(Math.max(0,1-Math.max(0,abs-.4)*.44));
+          card.style.zIndex=String(10-Math.round(abs*2));
+          card.style.pointerEvents=index===active?'auto':'none';
+          if(card.tagName==='A')card.tabIndex=index===active?0:-1;
+        });
+        counter.textContent=String(active+1).padStart(2,'0')+' / 03 · '+labels[section][active];
+        dots.forEach((dot,i)=>dot.classList.toggle('active',i===active));
+      });
+    }
+    function schedule(){if(!ticking){ticking=true;requestAnimationFrame(update)}}
+    if(!reduced.matches)document.documentElement.classList.add('motion');
+    addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);
+    reduced.addEventListener('change',()=>{document.documentElement.classList.toggle('motion',!reduced.matches);stages.forEach(({cards})=>cards.forEach(card=>{card.style.cssText='';if(card.tagName==='A')card.removeAttribute('tabindex')}));schedule()});
+    update();
   </script>
 </body>
 </html>
